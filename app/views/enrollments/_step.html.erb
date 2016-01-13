@@ -1,0 +1,35 @@
+<div class="panel panel-info <%= 'hidden' if s.object.marked_for_destruction? %>">
+  <div class="panel-heading">
+    <a data-toggle="collapse" href="#step-<%= s.options[:child_index] %>">
+      <i class="fa fa-plus"></i>Step<%= s.object.new_record? ? "" : " #{s.index.to_i + 1}" %>: <%= s.object.title.blank? ? "New" : s.object.title %>
+    </a>
+    <span class='pull-right'>
+      <%= link_to '#', class: "trash" do %>
+        <i class="fa fa-trash-o"></i>
+      <% end %>
+    </span>
+  </div>
+  <div id="step-<%= s.options[:child_index] %>" class="panel-collapse <%= s.object.title.blank? || s.object.errors.any? ? 'in' : 'collapse' %>">
+    <div class="panel-body">
+      <%= s.input :_destroy, as: :hidden %>
+      <%= s.input :id, as: :hidden %>
+      <div class='row'>
+        <div class='col-md-1'>
+          <%= s.input :sequence, as: :string, label: 'Order', hint: "1,2,etc..." %>
+        </div>
+        <div class='col-md-3'>
+          <%= s.input :step_type, as: :select, collection: Collections::STEP_TYPES.invert, label: "Step Type?", include_blank: false, input_html: { class: 'step-type'} %>
+        </div>
+        <div class='col-md-5'>
+          <%= s.input :title, label: 'Step title (Progress Tracker)', hint: ' (How will this display in the Progress Tracker? i.e. “Orientation, Interview, etc.)' %>
+        </div>
+        <div class='col-md-3'>
+          <%= s.input :email, collection: @current_profile.emails.map { |email| [email.subject, email.id] }, label: 'Email (Optional)', include_blank: '- Select Email -' %>
+        </div>
+      </div>
+      <div class="form-selector row" id="<%= s.object.id || 0 %>">
+        <%= render 'form_select', s: s %>
+      </div>
+    </div>
+  </div>
+</div>

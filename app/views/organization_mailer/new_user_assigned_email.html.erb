@@ -1,0 +1,6 @@
+<% provide(:header, "A new #{@user.role} has been assigned to your organization:") %>
+<% content_for :body do %>
+  Name: <%= @user.name %><br>
+  Login: <%= @user.login %>
+<% end %>
+<%= render 'shared_mailer/mailer_template' %>

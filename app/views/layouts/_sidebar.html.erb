@@ -1,0 +1,163 @@
+<div class="logo-box">
+  <%= image_tag current_user.organizations.first.logo.url(:thumb), alt: 'Logo Image', id: 'logo' %>
+</div>
+
+<div class='navbar'>
+  <div class="navbar-inverse" role="navigation">
+    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu-toggle">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+  </div>
+</div>
+
+<div id='menu-toggle' class='navbar-collapse collapse'>
+  <div class="menu">
+    <div class="user-dropdown dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-cog"></i><%= current_user.first_name %><i class="fa fa-chevron-right pull-right"></i><i class="fa fa-chevron-down pull-right"></i></a>
+      <div class="dropdown-menu">
+        <li>
+          <%= link_to edit_user_registration_path do %>
+            <i class="fa fa-user"> </i>Edit Name / Login
+          <% end %>
+        </li>
+        <% if current_user.is_partner? %>
+          <li>
+            <%= link_to edit_organization_path(@organization) do %>
+              <i class="fa fa-pencil-square-o"> </i>Edit Organization
+            <% end %>
+          </li>
+          <li>
+            <%= link_to organization_preferences_path(@organization) do %>
+              <i class="fa fa-gear"> </i>Edit Preferences
+            <% end %>
+          </li>
+        <% else %>
+          <li>
+            <%= link_to @current_profile do %>
+              <i class="fa fa-list-alt"> </i>View Profile
+            <% end %>
+          </li>
+        <% end %>
+        <li class="divider"></li>
+        <li>
+          <%= link_to destroy_user_session_path, method: :delete do %>
+            <i class="fa fa-power-off"> </i>Sign Out
+          <% end %>
+        </li>
+      </div>
+    </div>
+
+    <% if current_user.is_partner? %>
+      <div class='menu-list'>
+        <li>
+          <%= link_to organization_dashboard_path(@current_profile) do %>
+            <i class="fa fa-bar-chart-o"></i>DASHBOARD
+          <% end %>
+        </li>
+        <li>
+          <%= link_to organization_staff_path(@current_profile) do %>
+            <i class="fa fa-book"></i>STAFF MEMBERS
+          <% end %>
+        </li>
+        <li>
+          <%= link_to organization_enrollments_path(@current_profile) do %>
+            <i class="fa fa-th-list"></i>CUSTOM ONBOARDING
+          <% end %>
+        </li>
+        <li>
+          <%= link_to organization_users_path(@current_profile, search: { role: 'Mentor' }) do %>
+            <i class="fa fa-users"></i>MENTORS
+          <% end %>
+        </li>
+        <li>
+          <%= link_to organization_users_path(@current_profile, search: { role: 'Mentee' }) do %>
+            <i class="fa fa-users"></i>MENTEES
+          <% end %>
+        </li>
+        <% if @current_profile.use_references? %>
+          <li>
+            <%= link_to organization_references_path(@current_profile) do %>
+              <i class="fa fa-envelope-o"></i>REFERENCES
+            <% end %>
+          </li>
+        <% end %>
+        </div>
+        <div class='menu-list'>
+        <% if @current_profile.use_background_checks? %>
+          <li>
+            <%= link_to organization_background_checks_path(@current_profile) do %>
+              <i class="fa fa-file"></i>BACKGROUND CHECKS
+            <% end %>
+          </li>
+        <% end %>
+        <li>
+          <%= link_to organization_matches_path(@current_profile) do %>
+            <i class="fa fa-link"></i>MATCHES
+          <% end %>
+        </li>
+        <li>
+          <%= link_to organization_check_ins_path(@current_profile) do %>
+            <i class="fa fa-thumbs-o-up"></i>CHECK-INS
+          <% end %>
+        </li>
+        <li>
+          <%= link_to organization_goals_path(@current_profile) do %>
+            <i class="fa fa-tasks"></i>GOALS
+          <% end %>
+        </li>
+        <li>
+          <%= link_to organization_import_path(@current_profile) do %>
+            <i class="fa fa-cloud-upload"></i>IMPORTS
+          <% end %>
+        </li>
+      </div>
+    <% else %>
+      <% if current_user.matches.any? %>
+        <div class='menu-list'>
+          <li>
+            <% if next_check_in = current_user.next_check_in %>
+              <%= link_to edit_user_check_in_path(current_user, next_check_in) do %>
+                <i class="fa fa-clock-o"> </i>CHECK-IN (<i class="fa fa-comment"> x <%= current_user.unrated_check_ins.count %></i>)
+              <% end %>
+            <% elsif current_user.is_mentor? %>
+              <%= link_to new_user_check_in_path(current_user) do %>
+                <i class="fa fa-clock-o"> </i>CHECK-IN (New)
+              <% end %>
+            <% end %>
+          </li>
+          <li>
+            <%= link_to user_check_ins_path(current_user) do %>
+              <i class="fa fa-list"></i>CHECK-IN HISTORY
+            <% end %>
+          </li>
+          <li>
+            <%= link_to user_goals_path(current_user, search: { completed: false }) do %>
+              <i class="fa fa-thumb-tack"></i>ASSIGNED GOALS
+            <% end %>
+          </li>
+        </div>
+        <div class='menu-list'>
+          <li>
+            <%= link_to user_goals_path(current_user, search: { completed: true }) do %>
+              <i class="fa fa-thumb-tack"></i>COMPLETED GOALS
+            <% end %>
+          </li>
+          <li>
+            <%= link_to user_matches_path(current_user) do %>
+              <i class="fa fa-link"></i>MY MATCHES
+            <% end %>
+          </li>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="footer-links">
+    <li><%= link_to 'Privacy Policy', 'http://getmentorme.com/home/privacy', target: '_blank' %> &amp; <%= link_to 'Terms of Service', 'http://getmentorme.com/home/termsofservice', target: '_blank' %></li>
+    <li>Powered by <%= link_to "MentorMe", "http://www.getmentorme.com", target: "_blank" %></li>
+  </div>
+</div>
+

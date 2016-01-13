@@ -1,0 +1,16 @@
+<h4 class="text-center"><%= Collections::USER_TYPES[enrollment.user_type] %></h4>
+<% ou = @user.organizations_users.find_by(organization: enrollment.organization) %>
+<%= render 'users/progress_bar', percent_complete: ou.progress %>
+<br>
+<table class="table table-ultra-condensed table-hover table-responsive">
+  <tbody>
+    <ol>
+	  	<% enrollment.steps.each do |step| %>
+  	  	<li><i class="fa fa-<%= @user.statuses.find_by(step_id: step.id).try(:completed) ? "check-" : "" %>square-o"></i> <%= step.title %></li>
+        <% if step.template == 'references' %>
+          <li><i class="fa fa-<%= ou.references_submitted? ? "check-" : "" %>square-o"></i> References Submitted</li>
+        <% end %>
+  	  <% end %>
+    </ol>
+	</tbody>
+</table>

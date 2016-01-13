@@ -1,0 +1,35 @@
+<div class="container"><br>
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <h4 class="panel-title">Please fill out the following confidential reference:</h4>
+    </div>
+    <div class="panel-body">
+      <%= semantic_form_for(@reference) do |f| %>
+        <%= f.inputs do %>
+          <%= f.input :user, as: :string, label: "Mentor's Name", input_html: { value: @user_name, readonly: true } %>
+          <%= f.input :endorsement, as: :hidden, input_html: { value: :true } %>
+          <%= f.input :name, label: "What is your name?" %>
+          <%= f.input :phone, label: "What is the best phone phone number to reach you at?" %>
+          <%= f.input :email, label: "What is the best email to reach you at?" %>
+          <%= f.input :relation, label: "What is your relationship with #{@user_name}?" %>
+          <%= f.input :describe_duties, input_html: { rows: 4 },
+            label: "If applicable, please describe #{@user_name}’s job or volunteer duties while with your organization. (optional)" %>
+          <%= f.input :acquainted, label: "How long have you known #{@user_name}?" %>
+          <%= f.input :reliable, as: :select, collection: ["Yes", "No"],
+            label: "Do you consider #{@user_name} to be reliable/punctual?" %>
+          <%= f.input :follow_through, as: :select, collection: ["Yes", "No"],
+            label: "Does #{@user_name} follow tasks through to completion?" %>
+          <%= f.input :uncomfortable_groups, input_html: { rows: 4 },
+            label: "Are there any groups of people with whom #{@user_name} would feel uncomfortable working with? If yes, which groups of people? (optional)" %>
+          <%= f.input :strengths, input_html: { rows: 4 },
+            label: "What are #{@user_name}’s biggest strengths?" %>
+          <%= f.input :improvement_areas, input_html: { rows: 4 },
+            label: "Any areas that could use improvements?" %>
+          <%= f.input :content, input_html: { rows: 4 },
+            label: "Anything else you want to tell us about #{@user_name} (optional)?" %>
+          <%= f.submit "Submit", class: 'btn btn-primary' %>
+        <% end %>
+      <% end %>
+    </div>
+  </div><br>
+</div>

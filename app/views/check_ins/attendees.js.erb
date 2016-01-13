@@ -1,0 +1,3 @@
+<%= semantic_fields_for @match.check_ins.new do |f| %>
+	$('div#attendees').empty().append("<%= j render 'attendees', f: f, match: @match %>")
+<% end %>

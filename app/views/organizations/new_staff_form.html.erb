@@ -1,0 +1,40 @@
+<%= semantic_form_for @staff ||= User.new, url: organization_create_staff_path, method: :post do |f| %>
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <h4 class="panel-title">New Staff Member</h4>
+    </div>
+    <div class="panel-body">
+      <div class='row'>
+        <div class='col-md-6'>
+          <%= f.input :first_name, label: "First Name", required: true %>
+        </div>
+        <div class='col-md-6'>
+          <%= f.input :last_name, label: "Last Name", required: true %>
+        </div>
+      </div>
+      <div class='row'>
+        <div class='col-md-6'>
+          <%= f.input :login, label: "Staff Email (Login)" %>
+        </div>
+      </div>
+      <div class='row'>
+        <div class='col-md-6'>
+          <%= f.input :password, :autocomplete => "off" %>
+        </div>
+        <div class='col-md-6'>
+          <%= f.input :password_confirmation %>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+  <div class="panel panel-danger">
+    <div class="panel-heading">
+      <h4 class="panel-title">Important</h4>
+    </div>
+    <div class="panel-body">
+      <h5>New staff will <strong><u>NOT</u></strong> be emailed with password information. You must provide it to them.</h5>
+      <%= f.submit "Add Staff", class: "btn btn-primary" %>
+    </div>
+  </div>
+<% end %>

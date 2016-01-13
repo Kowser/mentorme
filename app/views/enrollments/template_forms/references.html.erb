@@ -1,0 +1,51 @@
+<% if !@step.new_record? && @user.organizations_users.find_by(organization: @step.organization).try(:references_submitted) && !current_user.is_partner? %>
+  <%= semantic_form_for @user do |f| %>
+    <%= hidden_field_tag :step_id, @step.id %>
+    <%= hidden_field_tag :template, @step.template %>
+    <%= f.input :template, as: :hidden %>
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <h4 class="panel-title">Reference Information</h4>
+      </div>
+      <div class="panel-body">
+        <h4 class='text-center'>Good news! Looks we already have your references.</h4><br>
+        <%= f.submit "Continue", class: "btn btn-primary" %>
+      </div>
+    </div>
+  <% end %>
+
+<% else %>
+  <% (@step.quantity - @user.references.length).times { @user.references.build } %>
+  <% @object = (current_user.is_partner? ? [@current_profile, @user] : @user) # allows partner or user to edit their profile %>
+  <%= semantic_form_for @object do |f| %>
+    <%= hidden_field_tag :step_id, @step.id %>
+    <%= hidden_field_tag :template, @step.template %>
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <h4 class="panel-title">Reference Information</h4>
+      </div>
+      <div class="panel-body">
+        <%= f.semantic_fields_for :references do |ref| %>
+          <%= ref.input :id, as: :hidden %>
+          <h4>Reference <%= ref.options[:child_index] + 1 %> Information</h4>
+          <hr>
+          <div class='row'>
+            <div class='col-sm-6'>
+              <%= ref.input :name %>
+            </div>
+            <div class='col-sm-6'>
+              <%= ref.input :relation %>
+            </div>
+            <div class='col-sm-6'>
+              <%= ref.input :email %>
+            </div>
+            <div class='col-sm-6'>
+              <%= ref.input :phone %>
+            </div>
+          </div>
+        <% end %>
+        <%= f.submit "Save & Continue", class: "btn btn-primary" %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

@@ -1,0 +1,5 @@
+<% provide(:header, @email.subject) %>
+<% content_for :body do %>
+  <p><%= @email.body.html_safe %></p>
+<% end %>
+<%= render 'shared_mailer/mailer_template' %>

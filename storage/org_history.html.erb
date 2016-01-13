@@ -1,0 +1,32 @@
+<table class="table table-condensed table-striped table-hover table-responsive">
+  <thead>
+    <tr>
+      <th>Organization</th>
+      <th class='text-center'>Referred?</th>
+      <th class='text-center'>Joined Date</th>
+      <th class='text-center'>Active</th>
+    </tr>
+  </thead>
+  <tbody id='history_index'>
+    <%= render 'organizations_users/history_index', object: @user %>
+  </tbody>
+  <% if current_user.is_partner? && @myorg.is_umbrella? %>
+    <tfoot>
+      <tr>
+        <td colspan='8'>
+          <%= semantic_form_for OrganizationsUser.new, method: :post, remote: true do |f| %>
+            <%= f.input :user_id, as: :hidden, input_html: { value: @user.id } %>
+            <div class='row'>
+              <div class='col-md-6'>
+                <%= f.input :organization, as: :select, collection: [@myorg] + @myorg.partners, label: false, include_blank: "- Add to Organization -" %>
+              </div>
+              <div class='col-md-2'>
+                <%= f.submit "Assign", class: "btn btn-sm btn-danger", data: { disable_with: "Assigning..." } %>
+              </div>
+            </div>
+          <% end %>
+        </td>
+      </tr>
+    </tfoot>
+  <% end %>
+</table>

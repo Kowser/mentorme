@@ -1,0 +1,57 @@
+<div class="panel panel-success">
+  <div class="panel-heading"><h4 class="panel-title">Reference: <%= @reference.name %></h4></div>
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-sm-3"><!-- COLUMN 1 -->
+        <p><%= image_tag(@user.photo.try(:url, :square), class: "img-responsive") %></p>
+      </div>
+      <div class="col-sm-9"><!-- COLUMN 2 -->
+        <table class="table table-condensed table-striped table-hover table-responsive">
+          <tbody>
+            <tr><td><%= @user.role %>:</td><td><%= @user.name %></td></tr>
+            <tr><td>Reference:</td><td><%= @reference.name %></td></tr>
+            <tr><td>Relationship:</td><td><%= @reference.relation %></td></tr>
+            <tr><td>Email:</td><td><%= @reference.email %></td></tr>
+            <tr><td>Phone:</td><td><%= @reference.phone %></td></tr>
+            <tr>
+              <td>Contact:</td>
+              <td>
+                <%= form_for @reference, html: { method: "patch" }, remote: true do |f| %>
+                  <%= f.check_box :contacted %> Contacted
+                <% end %>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <%= render 'admin/notes', object: @reference, collapse: false %>
+      </div>
+    </div>
+  </div>
+  <br>
+
+  <div class="panel-heading"><h4 class="panel-title">Reference</h4></div>
+  <table class="table table-condensed table-striped table-hover table-responsive">
+    <tbody>
+      <tr><th>If applicable, please describe <%= @user.name %>’s job or volunteer duties while with your organization. (optional):</th></tr>
+      <tr><td><%= @reference.describe_duties %></td></tr>
+      <tr><th>How long have you known <%= @user.name %>?</th></tr>
+      <tr><td><%= @reference.acquainted %></td></tr>
+      <tr><th>Do you consider <%= @user.name %> to be reliable/punctual?</th></tr>
+      <tr><td><%= @reference.reliable %></td></tr>
+      <tr><th>Does <%= @user.name %> follow tasks through to completion?</th></tr>
+      <tr><td><%= @reference.reliable %></td></tr>
+      <tr><th>Are there any groups of people with whom <%= @user.name %> would feel uncomfortable working with? If yes, which groups of people? (optional):</th></tr>
+      <tr><td><%= @reference.uncomfortable_groups %></td></tr>
+      <tr><th>What are <%= @user.name %>’s biggest strengths?</th></tr>
+      <tr><td><%= @reference.strengths %></td></tr>
+      <tr><th>Any areas that could use improvements?</th></tr>
+      <tr><td><%= @reference.improvement_areas %></td></tr>
+      <tr><th>Anything else you want to tell us about <%= @user.name %> (optional)?</th></tr>
+      <tr><td><%= @reference.content %></td></tr>
+    </tbody>
+  </table>
+</div>

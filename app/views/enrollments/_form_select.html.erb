@@ -1,0 +1,28 @@
+<% if s.object.step_type == "custom" %>
+	<div class='col-md-3'>
+		<%= s.input :form, label: "Custom Application", as: :select, collection: @current_profile.forms.map { |form| [form.title, form.id] }, hint: 'A form is required', include_blank: '- Custom Applications -' %>
+	</div>
+	<div class='col-md-6'>
+		<%= s.input :notification, placeholder: 'Saved. Thank you!', label: 'Flash message after step completed (Optional)' %>
+	</div>
+  <div class='col-md-3'>
+    <%= s.input :prerequisite_step, as: :select, collection: @enrollment.steps.map { |step| [step.title, step.id] }, label: 'Prerequisite (Optional)', include_blank: '- Select Step -' %>
+  </div>
+<% elsif s.object.step_type == "template" %>
+  <div class='col-md-3 template-selector'>
+    <%= s.input :template, as: :select, label: "Template Application", include_blank: '- Template Applications -', input_html: { class: 'template-selector' },
+    collection: Collections::TEMPLATES + 
+      (@current_profile.use_references? ? [['Reference Information', 'references']] : []) +
+      (@current_profile.use_background_checks? ? [['Background Check', 'background']] : [] )
+    %>
+  </div>
+  <div class='col-md-6'>
+    <%= s.input :notification, placeholder: 'Saved. Thank you!', label: 'Flash message after step completed (Optional)' %>
+  </div>
+  <div class='col-md-3'>
+    <%= s.input :prerequisite_step, as: :select, collection: @enrollment.steps.map { |step| [step.title, step.id] }, label: 'Prerequisite (Optional)', include_blank: '- Select Step -' %>
+  </div>
+  <div class='col-md-11 template-fields'>
+    <%= render 'template_fields', s: s %>
+  </div>
+<% end %>

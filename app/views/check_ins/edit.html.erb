@@ -1,0 +1,9 @@
+<%= render 'form', title: 'Edit Check-In' %>
+
+<script type="text/javascript">
+  <% @rating_object = @current_profile.ratings.where(check_in_id: @check_in.id).first %>
+  var current_rating = <%= !@rating_object.nil? ? @rating_object.rating : 0 %>
+  <% if !@rating_object.nil? %>
+    $("#check_in_ratings_attributes_0_rating_" + current_rating).prop('checked', true);
+  <% end %>
+</script>

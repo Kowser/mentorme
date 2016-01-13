@@ -1,0 +1,48 @@
+<% url_path = current_user.is_partner? ? organization_user_path(@current_profile, @user) : @user # allows partner or user to edit their profile %>
+<%= semantic_form_for @user, url: url_path do |f| %>
+  <%= hidden_field_tag :step_id, @step.id %>
+  <%= hidden_field_tag :template, @step.template %>
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <h4 class="panel-title">Guardian Information</h4>
+    </div>
+    <div class="panel-body">
+      <%= f.input :guardian_name, label: "Guardian's Name" if @step.template_fields.include?('name') %>
+      <%= f.input :relation, label: "What is your guardian's relationship to you?", placeholder: "Father / Mother / etc..." if @step.template_fields.include?('relation') %>
+      <% if @step.template_fields.include?('address') %>
+        <div class='row'>
+          <div class='col-md-8'>
+            <%= f.input :address1, label: "Street Address" %>
+          </div>
+          <div class='col-md-4'>
+            <%= f.input :address2, label: "Apartment/Unit Number" %>
+          </div>
+        </div>
+        <div class='row'>
+          <div class='col-md-6'>
+            <%= f.input :city %>
+          </div>
+          <div class='col-md-3'>
+            <%= f.input :state, as: :select, collection: Collections::STATE %>
+          </div>
+          <div class='col-md-3'>
+            <%= f.input :zip %>
+          </div>
+        </div>
+      <% end %>
+      <div class='row'>
+        <div class='col-md-4'>
+          <%= f.input :guardian_cell_phone, label: 'Cell phone' if @step.template_fields.include?('phone') %>
+        </div>
+        <div class='col-md-4'>
+          <%= f.input :guardian_home_phone, label: 'Home phone' if @step.template_fields.include?('phone') %>
+        </div>
+        <div class='col-md-4'>
+          <%= f.input :guardian_work_phone, label: 'Work phone' if @step.template_fields.include?('work_phone') %>
+        </div>
+      </div>
+      <%= f.input :guardian_phone_preference, as: :select, collection: ['Cell','Home','Work'], label: "Which phone number should we use to call?" if @step.template_fields.include?('phone_preference') %>
+      <%= f.submit "Save & Continue", class: "btn btn-primary" %>
+    </div>
+  </div>
+<% end %>

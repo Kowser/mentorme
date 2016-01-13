@@ -1,0 +1,5 @@
+<%= semantic_fields_for Enrollment.new do |f| %>
+	<%= f.semantic_fields_for :steps, @step, child_index: @index do |s| %>
+		$('div.insert-here').empty().append("<%= j render 'form_select', s: s %>").removeClass('insert-here');
+	<% end %>
+<% end %>

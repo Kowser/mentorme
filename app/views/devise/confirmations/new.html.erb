@@ -1,0 +1,14 @@
+<% provide(:title, "Confirmation") %>
+
+<% content_for :form do %>
+  <div class="float-form-content">
+    <h4>Resend confirmation instructions</h4>
+
+    <%= semantic_form_for(resource, :as => resource_name, :url => confirmation_path(resource_name), :html => { :method => :post }) do |f| %>
+      <%= f.input :login, label: false, placeholder: "Login" %>
+      <%= f.submit "Resend Confirmation", class: 'btn btn-info' %>
+    <% end %>
+    <%= render "devise/shared/links" %>
+  </div>
+<% end %>
+

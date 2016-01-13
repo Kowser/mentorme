@@ -1,0 +1,54 @@
+<% if @user # single user update %>
+  <% @organizations_users = @user.organizations_users.find_by(organization: @current_profile) %>
+  <% display = @user.is_mentor? %>
+  <% label = "Move to Organization" %>
+  <%= render 'admin/notes', object: @organizations_users, collapse: false %><br><hr>
+<% elsif @users # multi-user update %>
+  <% @organizations_users = OrganizationsUser.new(active: nil, background_passed: nil, references_submitted: nil) %>
+  <% display = role_name == 'Mentors' %>
+  <% label = false %>
+<% end %>
+
+<%= semantic_fields_for @user || User.new do |f| %>
+  <div class="row">
+    <% @enrollments.each do |enrollment| %>
+      <% enrollment.steps.each do |step| %>
+        <%= f.semantic_fields_for :statuses, (@user ? @user.statuses.where(step_id: step.id).first_or_initialize : Status.new) do |s| %>
+          <div class="col-xs-6 col-md-4 col-lg-3">
+            <%= s.input :step_id, as: :hidden, input_html: { value: step.id } %>
+            <%= s.input :completed, as: :radio, label: step.title %>
+          </div>
+        <% end %>
+      <% end %>
+    <% end %>
+    <%= f.semantic_fields_for :organizations_users, @organizations_users do |ou| %>
+      <div class="col-xs-6 col-md-4 col-lg-3">
+        <%= ou.input :active, as: :radio, label: "User active?" %>
+      </div>
+      <% if display && @current_profile.use_references %>
+        <div class="col-xs-6 col-md-4 col-lg-3">
+          <%= ou.input :references_submitted, as: :radio, label: "References submitted?" %>
+        </div>
+      <% end %>
+      <% if display && @current_profile.use_background_checks %>
+        <div class="col-xs-6 col-md-4 col-lg-3">
+          <%= ou.input :background_passed, as: :radio, label: "Background passed?" %>
+        </div>
+      <% end %>
+      <div class="col-xs-6 col-md-4 col-lg-3">
+        <%= ou.input :can_match, as: :radio, label: "Ready to match?" %>
+      </div>
+      <% if @organization.is_umbrella? %>
+        </div><div class="row"><div class='col-md-12'>
+          <%= ou.input :organization, as: :select, collection: [@organization] + @organization.partners.order(:name), label: label, include_blank: "- Move to Organization -" %>
+        </div>
+      <% end %>
+      <% if @user %>
+        </div><div class="row"><div class='col-md-12'>
+          <%= ou.input :tags, label: "User Tags" %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>    
+  <%= f.submit "Update", class: "btn btn-sm btn-danger" %>
+<% end %>

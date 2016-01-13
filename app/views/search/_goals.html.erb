@@ -1,0 +1,5 @@
+<div class='col-xs-12 col-lg-12'><%= f.input :match_id, as: :select, collection: @match_names, label: false, include_blank: '- Matches -' %></div>
+<div class='col-xs-6 col-sm-3 col-md-3 col-lg-2'><%= f.input :keyword, as: :string, label: false, placeholder: 'Search Title' %></div>
+<div class='col-xs-6 col-sm-2 col-md-2 col-lg-2'><%= f.input :created_at, as: :string, label: false, placeholder: 'Assigned Date', autocomplete: 'off', input_html: { class: 'calendar' }  %></div>
+<div class='col-xs-6 col-sm-2 col-md-2 col-lg-2'><%= f.input :assignees, as: :select, collection: ['Everyone', 'Mentors', 'Mentees'], label: false, include_blank: '- Assignees -' %></div>
+<div class='col-xs-6 col-sm-2 col-md-2 col-lg-1'><%= f.input :completed, as: :select, collection: [['Complete', true], ['Incomplete', false]], label: false, include_blank: '- Status -' %></div>

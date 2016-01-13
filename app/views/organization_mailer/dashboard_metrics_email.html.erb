@@ -1,0 +1,5 @@
+<% provide(:header, "Dashboard Metrics") %>
+<% content_for :body do %>
+  <%= render 'organizations/dashboard', o: @organization %>
+<% end %>
+<%= render 'shared_mailer/mailer_template' %>

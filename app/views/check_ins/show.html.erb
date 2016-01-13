@@ -1,0 +1,100 @@
+<div class="panel panel-success">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      Check-In <%= link_to '(Edit)', edit_polymorphic_path([@current_profile, @check_in]) unless current_user.is_partner? %>
+    </h4>
+  </div>
+  <table class="table table-condensed table-striped table-hover table-responsive">
+    <tbody>
+      <tr><td>How long did this meeting last:</td><td><%= @check_in.length %> hour(s)</td></tr>
+      <tr><td>How did you meet:</td><td><%= @check_in.meeting_type %></td></tr>
+      <tr><td>Where did you meet:</td><td><%= @check_in.location || 'N/A' %></td></tr>
+      <tr><td>When did you meet:</td><td><%= @check_in.date.strftime("%B %e, %Y") %></td></tr>
+      <tr><td>When is the next meeting:</td><td><%= @check_in.next_date.strftime("%B %e, %Y") %></td></tr>
+      <% unless current_user.is_partner? %>
+        <tr><td>Mentors:</td><td><%= @check_in.mentors.map(&:name).join(', ') %></td></tr>
+        <tr><td>Mentees:</td><td><%= @check_in.mentees.map(&:name).join(', ') %></td></tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <% if current_user.is_partner? %>
+    <div class="panel-success">
+      <div class="panel-heading">
+        <h4 class="panel-title">Attendees, Ratings &amp; Notes</h4>
+      </div>
+      <table class="table table-condensed table-hover table-responsive">
+        <tbody>
+        <tr>
+          <th>Role</th>
+          <th>Name</th>
+          <th>Rating</th>
+          <th>Tell us more about what you did</th>
+        </tr>
+        <% @check_in.users.each do |user| %>
+          <tr>
+            <td><%= user.role %></td>
+            <td><%= user.name %></td>
+            <td><%= (rating = @check_in.ratings.find_by(user: user)) ? rating.rating : "--" %></td>
+            <td><%= rating.try(:notes) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class='panel-success'>
+      <div class="panel-heading">
+        <h4 class="panel-title">Private (not shown to match)</h4>
+      </div>
+    </div>
+    <table class="table table-condensed table-hover table-responsive">
+      <tbody>
+        <tr>
+          <th>Meeting Satisfaction</th>
+          <th>Tell us more about what you did:</th>
+        </tr>
+        <tr>
+          <td class='rating'><%= (rating = @check_in.ratings.find_by(user: current_user)) ? image_tag("ratings/#{rating.rating}.png") : "Not Rated" %></td>
+          <td><%= rating.try(:notes) %></td>
+        </tr>
+      </tbody>
+    </table>
+  <% end %>
+
+  <% if @check_in.attachments.any? %>
+    <div class="panel-success">
+      <div class="panel-heading">
+        <h4 class="panel-title">Photo Attachments</h4>
+      </div>
+      <table class="table table-condensed table-striped table-hover table-responsive">
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th>Photo Name</th>
+            <th>Uploaded By</th>
+            <th>Uploaded On</th>
+            <th><i class="fa fa-trash-o"></i></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @check_in.attachments.each do |attachment| %>
+            <tr>
+              <td><%= attachment.description %></td>
+              <td><%= link_to attachment.document_file_name, attachment.document.url %></td>
+              <td><%= attachment.user.try(:name) %></td>
+              <td><%= attachment.created_at.try(:strftime, "%m/%d/%Y") %></td>
+              <td>
+                <% if attachment.user == current_user || current_user.is_partner? %>
+                  <%= link_to attachment, method: :delete, class: 'delete-file-link', data: { disable_with: "Deleting..." }, remote: true do %>
+                    <i class="fa fa-trash-o"></i>
+                  <% end %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</div>

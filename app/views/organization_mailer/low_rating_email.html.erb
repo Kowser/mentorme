@@ -1,0 +1,6 @@
+<% provide(:header, "You Have a #{@user.role} with an Unhappy Check-In") %>
+<% content_for :body do %>
+  <p><%= @user.name %> had an unhappy experience with a recent check in.</p>
+  <p><%= link_to 'Log In', new_user_session_url %> to view the details.</p>
+<% end %>
+<%= render 'shared_mailer/mailer_template' %>

@@ -1,0 +1,12 @@
+<div class='row'>
+  <%= semantic_form_for note, id: "new_comment", remote: true do |f| %>
+    <div class='col-xs-9 col-md-10'>
+      <%= f.input :notable_id, as: :hidden %>
+      <%= f.input :notable_type, as: :hidden %> 
+      <%= f.input :content, label: false, input_html: { rows: 1 } %>
+    </div>
+    <div class='col-xs-3 col-md-2'>
+      <%= f.submit "Submit", class: 'btn btn-sm btn-primary', data: { disable_with: 'Saving...' } %>
+    </div>
+  <% end %>
+</div>

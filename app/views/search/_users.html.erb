@@ -1,0 +1,7 @@
+<div class='col-xs-6 col-sm-4 col-md-2 col-lg-2'><%= f.input :keyword, as: :string, label: false, placeholder: "Search Name or Login" %></div>
+<div class='col-xs-6 col-sm-4 col-md-2 col-lg-2'><%= f.input :tags, label: false, placeholder: 'Search Tag' %></div>
+<div class='col-xs-6 col-sm-3 col-md-2 col-lg-1'><%= f.input :sort, collection: [['Name', 'name'], ['Progress', 'progress'], ['Signed Up', 'sign_up']], label: false, include_blank: '- Sort By -' %></div>
+<div class='col-xs-6 col-sm-3 col-md-2 col-lg-1'><%= f.input :signed_in, as: :select, label: false, include_blank: '- Signed In -' %></div>
+<div class='col-xs-6 col-sm-3 col-md-2 col-lg-1'><%= f.input :matched, as: :select, label: false, include_blank: '- Matched -' %></div>
+<div class='col-xs-6 col-sm-3 col-md-2 col-lg-1'><%= f.input :active, as: :select, label: false, include_blank: '- Active -' %></div>
+<%= f.input :role, as: :hidden, input_html: { value: role_name.try(:singularize) || "Mentor" } %>

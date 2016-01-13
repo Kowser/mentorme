@@ -1,0 +1,1 @@
+$('#goals-index-panel').replaceWith("<%= j render 'index_panel' %>");

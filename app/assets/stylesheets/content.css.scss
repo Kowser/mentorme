@@ -1,0 +1,139 @@
+.content {
+  height: 100%;
+  width: auto;
+  max-width: 1440px;
+}
+
+.content-header {
+  background-color: #E8E8E8;
+  border-bottom: #2EB8E6 solid 1px;
+
+  @media(max-width: 767px) {
+    margin-top: 95px;
+    width: 100%;
+  }
+
+  @media(min-width: 768px) {
+    border-top: #2EB8E6 solid 6px;
+    margin-left: 170px;
+  }
+
+  .breadcrumbs {
+    padding: 10px;
+    font-size: 16px;
+    background-color: #fff;
+  }
+
+  .form-control {
+    font-size: 12px;
+    height: 30px;
+  }
+
+  form.organization {
+    padding: 10px 10px 0 10px;
+  }
+
+  .form-group {
+    margin-bottom: 10px;
+    #organization_id {
+      background-color: black;
+      color: white;
+      font-size: 14px;
+    }
+  }
+
+  .row {
+    margin: 0;
+    padding: 10px 10px 0 5px;
+    @media(max-width: 767px) {
+      padding-left: 10px;
+    }
+    div {
+      padding: 0 2px;
+    }
+  }
+}
+
+.content-body {
+  @media(min-width: 768px) {
+    margin: 10px 10px 0 180px;
+  }
+
+  @media(max-width: 767px) {
+    margin: 5px;
+  }
+
+  .date_picker {
+    width: 35%;
+  }
+
+  .fa-square-o {
+    font-size: 125%;
+    color: red;
+  }
+
+  .fa-check-square-o {
+    font-size: 125%;
+    color: green;
+  }
+
+  .rating {
+    input[type=radio] { display: none; }
+    .radio { display: inline; }
+    img {
+      max-width: 96px;
+      background-color: gray;
+    }
+    input[type=radio] + img {
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+    input[type=radio]:checked + img {
+      border: 5px solid blue;
+    }
+  }
+
+  .loading-bar {
+    width: 50%;
+    margin-left: 25%;
+  }
+
+  td.check-box, th.check-box {
+    width: 25px;
+  }
+
+  #search-panel {
+    .search {
+      margin-bottom: 0px;
+
+      .date-picker {
+        width: 150px;
+      }
+    }
+  }
+
+  .progress {
+    margin-bottom: 0;
+  }
+
+  hr {
+    margin-top: 0;
+  }
+
+  .img-responsive {
+    display: inline;
+  }
+
+  .table-ultra-condensed thead>tr>th,.table-ultra-condensed tbody>tr>th,.table-ultra-condensed tfoot>tr>th,.table-ultra-condensed thead>tr>td,.table-ultra-condensed tbody>tr>td,.table-ultra-condensed tfoot>tr>td {
+    padding: 1px
+  }
+  
+/*  .panel-success {
+    border-color: #393939;
+    .panel-heading {
+      color: #fff;
+      background-color: #6E6E6E;
+      border-color: #393939;
+    }
+  }*/
+}

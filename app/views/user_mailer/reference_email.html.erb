@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <p>Hey <%= @reference.name %></p>
+    <p><%= @reference.user.name %> needs your help with a reference for <%= @organization.name %>’s mentoring program. Would you mind visiting the <%= link_to "reference link", reference_url(@reference.url_token, subdomain: @organization.subdomain) %> to answer a few quick questions?<br><br>Thanks for being awesome! If you have any questions/problems, just give us a shout at <%= mail_to "help@getmentorme.com" %>.</p>
+  </body>
+</html>

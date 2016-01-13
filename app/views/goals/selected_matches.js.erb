@@ -1,0 +1,5 @@
+$('div#match_ids').empty().append(
+	"<p><% @current_profile.matches.each do |match| %>" +
+	"<%= j check_box_tag 'match_ids[]', match.id.to_s %> <%= match.name %><br>" +
+	"<% end %></p>"
+);

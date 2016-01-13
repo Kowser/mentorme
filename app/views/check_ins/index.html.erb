@@ -1,0 +1,4 @@
+<% content_for :search do %>
+	<%= render_search_panel('check_ins', path: polymorphic_path([@current_profile, CheckIn])) %>
+<% end %>
+<%= render 'index_panel' %>

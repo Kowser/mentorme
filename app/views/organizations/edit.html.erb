@@ -1,0 +1,31 @@
+<%= semantic_form_for @organization do |f| %>
+  <%= f.inputs do %>
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <h4 class="panel-title"><%= @organization.name %>: Profile</h4>
+      </div>
+      <div class="panel-body">
+        <%= f.input :name, label: "Organization Name" %>
+        <%= f.input :phone_number %>
+        <%= f.input :contact_email %>
+        <%= f.input :notification_email, label: "Notification Email: Activity notices sent here" %>
+        <%= f.input :address1, label: "Street Address" %>
+        <%= f.input :address2, label: "Suite #, etc.." %>
+        <%= f.input :city %>
+        <%= f.input :state, as: :select, collection: Collections::STATE %>
+        <%= f.input :zip_code %>
+        <%= f.input :url, label: "Organization Website" %>
+        <%= f.input :about_us, input_html: { rows: 3 } %>
+        <%= f.input :twitter_link, label: "Twitter link" %>
+        <%= f.input :fb_link, label: "Facebook link" %>
+        <%= f.input :logo, as: :file, required: false, label: "Organization Logo",
+                    hint: f.template.image_tag(f.object.logo.url(:thumb))
+        %>
+        <%= f.input :hero_image, as: :file, required: false, label: "Organization Banner (Hero Image)",
+                    hint: f.template.image_tag(f.object.hero_image.url(:thumb))
+        %>
+        <%= f.submit "Update", class: "btn btn-primary" %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

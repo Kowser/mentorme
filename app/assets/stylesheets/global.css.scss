@@ -1,0 +1,21 @@
+html, body {
+  height: 100%;
+  width: 100%;
+  margin-top: 0px;
+
+  @media(max-width: 991px) {
+    font-size: 12px;
+  }
+
+  @media(min-width: 992px) {
+  	font-size: 13px;
+  }
+
+  @media(min-width: 1200px) {
+  	font-size: 14px;
+  }
+}
+
+.fa {
+  margin-right: 5px;
+}

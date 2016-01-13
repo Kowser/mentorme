@@ -1,0 +1,80 @@
+<% @object = current_user.is_partner? ? [@current_profile, @user] : @user # allows partner or user to edit their profile %>
+<%= semantic_form_for @object do |f| %>
+  <%= hidden_field_tag :step_id, @step.id %>
+  <%= hidden_field_tag :template, @step.template %>
+  <%= f.input :staff_update, as: :hidden, input_html: { value: true }  if current_user.is_partner? %>
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <h4 class="panel-title">Profile Information</h4>
+    </div>
+    <div class="panel-body">
+      <div class='row'>
+        <div class='col-md-12'>
+          <%= f.input :photo, as: :file, label: "Profile Photo (Optional)", hint: f.template.image_tag(f.object.photo.url(:thumb)) %>
+        </div>
+      </div>
+      <div class='row'>
+        <div class='col-md-5'>
+          <%= f.input :first_name, input_html: { readonly: current_user.is_partner? } %>
+        </div>
+        <div class='col-md-5'>
+          <%= f.input :last_name, input_html: { readonly: current_user.is_partner? } %>
+        </div>
+        <div class='col-md-2'>
+          <%= f.input :gender, as: :select, collection: ['Male','Female'], include_blank: false  %>
+        </div>
+      </div>
+      <%= f.input :email, label: 'Email (Optional)' %>
+      <div class='row'>
+        <div class='col-md-4'>
+          <%= f.input :birth_date, as: :string, label: 'Birth Date: (MM/DD/YYYY)', input_html: { value: f.object.birth_date.try(:strftime, "%m/%d/%Y") } if @step.template_fields.include?('birth_date') %>
+        </div>
+        <% if @step.template_fields.include?('ethnicity') %>
+          <div class='col-md-5'>
+            <%= f.input :ethnicity, label: 'What is your ethnicity?', collection: Collections::ETHNICITY %>
+          </div>
+          <div class='col-md-3' id='user_ethnicity_other' style="<%= f.object.ethnicity == 'Other' ? '' : 'display: none;' %>" >
+            <%= f.input :ethnicity_other, label: 'Other - Please specify' %>
+          </div>
+        <% end %>
+      </div>
+      <% if @step.template_fields.include?('address') %>
+        <div class='row'>
+          <div class='col-md-8'>
+            <%= f.input :address1, label: "Street Address" %>
+          </div>
+          <div class='col-md-4'>
+            <%= f.input :address2, label: "Apartment/Unit Number" %>
+          </div>
+        </div>
+        <div class='row'>
+          <div class='col-md-6'>
+            <%= f.input :city %>
+          </div>
+          <div class='col-md-3'>
+            <%= f.input :state, as: :select, collection: Collections::STATE %>
+          </div>
+          <div class='col-md-3'>
+            <%= f.input :zip %>
+          </div>
+        </div>
+      <% end %>
+      <div class='row'>
+        <div class='col-md-4'>
+          <%= f.input :cell_phone if @step.template_fields.include?('cell_phone') %>
+        </div>
+        <div class='col-md-4'>
+          <%= f.input :home_phone if @step.template_fields.include?('home_phone') %>
+        </div>
+        <div class='col-md-4'>
+          <%= f.input :work_phone if @step.template_fields.include?('work_phone') %>
+        </div>
+      </div>
+      <%= f.input :phone_preference, as: :select, collection: ['Cell','Home','Work'], label: "Which phone number should we use to call you?" if @step.template_fields.include?('phone_preference') %>
+
+      <%= f.input :school, label: "Where do you go to school?", placeholder: "My school..." if @step.template_fields.include?('school')%>
+      <%= f.input :grade, label: "What grade are you in?", collection: Collections::GRADES if @step.template_fields.include?('grade') %>
+      <%= f.submit "Save & Continue", class: "btn btn-primary" %>
+    </div>
+  </div>
+<% end %>

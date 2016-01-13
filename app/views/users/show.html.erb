@@ -1,0 +1,277 @@
+<% if current_user.is_partner? && @preview.nil? %>
+  <%= render_admin_panel('Documents', 'attachments', object: @user.organizations_users.find_by(organization: @current_profile)) %>
+  <%= form_tag organization_update_user_path(@current_profile, @user), method: :patch do %>
+    <%= render_admin_panel("Edit #{@user.role}", 'update_users') %>
+  <% end %>
+<% end %>
+
+<div class="panel panel-success">
+  <div class="panel-heading">
+    <h4 class="panel-title">Profile 
+      <%= link_to '(Edit)', edit_user_registration_path if current_user == @user %>
+    </h4>
+  </div>
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-xs-12 col-sm-4 col-md-4"><!-- COLUMN 1 -->
+        <p><%= image_tag(@user.photo.try(:url, :square), class: "img-responsive") %></p>
+      </div>
+      <div class="col-xs-12 col-sm-8 col-md-8"><!-- COLUMN 2 -->
+        <table class="table table-condensed table-striped table-hover table-responsive">
+          <tbody>
+            <tr><td>Name:</td><td><%= @user.name %></td></tr>
+            <tr><td>Last Login:</td><td><%= @user.last_sign_in_at.try(:strftime, "%B %e, %Y") %></td></tr>
+            <% if current_user.is_partner? %>
+              <tr><td>Email:</td><td><%= @user.email %></td></tr>
+              <tr><td>Preferred Phone:</td><td><%= @user.preferred_phone %></td></tr>
+              <tr><td>Signed Up:</td><td><%= @user.enrolled(@current_profile) %></td></tr>
+              <tr>
+                <td>Matched:</td>
+                <td><%= @user.matches.where(organization: @current_profile).first.try(:created_at).try(:strftime, "%B %e, %Y") %></td>
+              </tr>
+              <tr>
+                <td>Last Check-In:</td>
+                <td><%= @user.check_ins.joins(:match).where(matches: { organization_id: @current_profile.id }).last.try(:created_at).try(:strftime, "%B %e, %Y") %></td>
+              </tr>
+              <tr>
+                <td>Total Hours:</td>
+                <td><%= @user.check_ins.joins(:match).where(matches: { organization_id: @current_profile.id }).pluck(:length).inject(:+) %></td>
+              </tr>
+              <tr>
+                <% if @user.is_mentor? %>
+                  <td>Mentees:</td>
+                  <td><%= @user.mentees.joins(:organizations_users).where(organizations_users: { organization_id: @current_profile.id, active: true }).map(&:name).uniq.join(', ') %></td>
+                <% else %>
+                  <td>Mentors:</td>
+                  <td><%= @user.mentors.joins(:organizations_users).where(organizations_users: { organization_id: @current_profile.id, active: true }).map(&:name).uniq.join(', ') %></td>
+                <% end %>
+              </tr>
+            <% else %>
+              <tr><td>Last Check-In:</td><td><%= @user.check_ins.last.try(:created_at).try(:strftime, "%B %e, %Y") %></td></tr>
+              <tr><td>Mentoring Hours:</td><td><%= @user.check_ins.pluck(:length).inject(:+) %></td></tr>
+              <tr>
+                <% if @user.is_mentor? %>
+                  <td>Mentees:</td><td><%= @user.mentees.map(&:name).uniq.join(', ') %></td>
+                <% else %>
+                  <td>Mentors:</td><td><%= @user.mentors.map(&:name).uniq.join(', ') %></td>
+                <% end %>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <% if @enrollments.any? %>
+    <div class="col-xs-12 col-md-4"><!-- COLUMN 1 -->
+      <div class="panel panel-success">
+        <div class="panel-heading">
+          <h4 class="panel-title text-center"><a data-toggle="collapse" data-parent="#accordion" href="#progress-panel"><i class="fa fa-minus"></i>Progress Tracker</a></h4>
+        </div>
+        <div id='progress-panel' class="panel-collapse collapse in">
+          <div class="panel-body">
+            <% @enrollments.each do |enrollment| %>
+              <%= render 'users/progress_tracker', enrollment: enrollment %>
+              <hr>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="col-xs-12 col-md-8"><!-- COLUMN 2 -->
+    
+    <% if @template_fields.include?('profile') %>
+      <div class="panel panel-success">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" href="#profile-panel"><i class="fa fa-plus"></i>Contact Information</a>
+            <% if current_user.is_partner? %>
+              <%= link_to '(Edit)', organization_user_edit_templates_path(@current_profile, @user, template: 'profile') %>
+            <% else %>
+              <%= link_to '(Edit)', user_edit_templates_path(@user, template: 'profile') %>
+            <% end %>
+          </h4>
+        </div>
+        <div id="profile-panel" class="panel-collapse collapse">
+          <table class="table table-condensed table-striped table-hover table-responsive">
+            <tbody>
+              <tr><td>Email:</td><td><%= @user.email %></td></tr>
+              <tr><td>Gender:</td><td><%= @user.gender %></td></tr>
+              <% if @template_fields['profile'].include?('birth_date') %><tr><td>Birthday:</td><td><%= @user.birth_date.try(:strftime, "%m/%d/%Y") %></td></tr><% end %>
+              <% if @template_fields['profile'].include?('ethnicity') %><tr><td>Ethnicity:</td><td><%= @user.ethnicity %><%= ' - ' + @user.ethnicity_other if @user.ethnicity == 'Other' %></td></tr><% end %>
+              <% if @template_fields['profile'].include?('address') %><tr><td>Home Address</td><td><%= @user.address1 %> <%= @user.address2 %><br><%= @user.city %>, <%= @user.state %> <%= @user.zip %></td></tr><% end %>
+              <% if @template_fields['profile'].include?('cell_phone') %><tr><td>Cell Phone:</td><td><%= @user.cell_phone %></td></tr><% end %>
+              <% if @template_fields['profile'].include?('home_phone') %><tr><td>Home Phone:</td><td><%= @user.home_phone %></td></tr><% end %>
+              <% if @template_fields['profile'].include?('work_phone') %><tr><td>Work Phone:</td><td><%= @user.work_phone %></td></tr><% end %>
+              <% if @template_fields['profile'].include?('phone_preference') %><tr><td>Preferred Phone:</td><td><%= @user.phone_preference %></td></tr><% end %>
+              <% if @template_fields['profile'].include?('school') %><tr><td>School:</td><td><%= @user.school %></td></tr><% end %>
+              <% if @template_fields['profile'].include?('grade') %><tr><td>Grade:</td><td><%= @user.grade %></td></tr><% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% end %>
+
+    <% if @template_fields.include?('employment') %>
+      <div class="panel panel-success">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" href="#employment-panel"><i class="fa fa-plus"></i>Employment Information</a>
+            <% if current_user.is_partner? %>
+              <%= link_to '(Edit)', organization_user_edit_templates_path(@current_profile, @user, template: 'employment') %>
+            <% else %>
+              <%= link_to '(Edit)', user_edit_templates_path(current_user, template: 'employment') if current_user == @user %>
+            <% end %>
+          </h4>
+        </div>
+        <div id="employment-panel" class="panel-collapse collapse">
+          <table class="table table-condensed table-striped table-hover table-responsive">
+            <tbody>
+              <% if @template_fields['employment'].include?('title') %><tr><td>Job Title:</td><td><%= @user.employer_job_title %></td></tr><% end %>
+              <% if @template_fields['employment'].include?('length') %><tr><td>Employment length:</td><td><%= @user.employer_length %></td></tr><% end %>
+              <% if @template_fields['employment'].include?('name') %><tr><td>Employer:</td><td><%= @user.employer_name %></td></tr><% end %>
+              <% if @template_fields['employment'].include?('address') %><tr><td>Address</td><td><%= @user.employer_address1 %> <%= @user.employer_address2 %><br><%= @user.employer_city %>, <%= @user.employer_state %> <%= @user.employer_zip %></td></tr><% end %>
+              <tr><td>Work Phone:</td><td><%= @user.work_phone %></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% end %>
+
+    <% if @template_fields.include?('references') && (@user.references.any? || current_user.is_partner?) %>
+      <div class="panel panel-success">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" href="#references-panel"> <i class="fa fa-plus"></i>Reference Information</a>
+            <% if current_user.is_partner? %>
+              <%= link_to '(Edit)', organization_user_edit_templates_path(@current_profile, @user, template: 'references') %>
+            <% else %>
+              <%= link_to '(Edit)', user_edit_templates_path(current_user, template: 'references') if current_user == @user %>
+            <% end %>
+          </h4>
+        </div>
+        <div id="references-panel" class="panel-collapse collapse">
+          <table class="table table-condensed table-hover table-responsive">
+            <tr>
+              <th class='text-center'><i class="fa fa-check"></i></th>
+              <% if @template_fields['references'].include?('name') %><th>Name</th><% end %>
+              <% if @template_fields['references'].include?('email') %><th>Email</th><% end %>
+              <% if @template_fields['references'].include?('phone') %><th>Phone</th><% end %>
+              <% if current_user.is_partner? %>
+                <th class='text-center'><i class="fa fa-search"></i></th>
+              <% else %>
+                <th>Re-Notify</th>
+              <% end %>
+            </tr>
+            <tbody>
+              <% @user.references.each do |reference| %>
+                <tr>
+                  <td class='text-center'><i class="fa fa-<%= reference.completed? ? "check-" : "" %>square-o"></i></td>
+                  <% if @template_fields['references'].include?('name') %><td><%= reference.name %></td><% end %>
+                  <% if @template_fields['references'].include?('email') %> <td><%= reference.email %></td><% end %>
+                  <% if @template_fields['references'].include?('phone') %><td><%= reference.phone %></td><% end %>
+                  <% if current_user.is_partner? %>
+                    <td class='text-center'><%= link_to("View", organization_reference_path(@current_profile, reference)) %></td>
+                  <% else %>
+                    <td class='text-center'><%= link_to 'Send', reference_resend_notification_path(reference), class: 'btn btn-default btn-xs' %></td>
+                  <% end %>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% end %>
+
+    <% if @template_fields.include?('guardian') %>
+      <div class="panel panel-success">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" href="#guardian-panel"><i class="fa fa-plus"></i>Guardian Information</a>
+            <% if current_user.is_partner? %>
+              <%= link_to '(Edit)', organization_user_edit_templates_path(@current_profile, @user, template: 'guardian') %>
+            <% else %>
+              <%= link_to '(Edit)', user_edit_templates_path(current_user, template: 'guardian') if current_user == @user %>
+            <% end %>
+          </h4>
+        </div>
+        <div id="guardian-panel" class="panel-collapse collapse">
+          <table class="table table-condensed table-striped table-hover table-responsive">
+            <tbody>
+              <% if @template_fields['guardian'].include?('name') %><tr><td>Name:</td><td><%= @user.guardian_name %></td></tr><% end %>
+              <% if @template_fields['guardian'].include?('relation') %><tr><td>Relation</td><td><%= @user.relation %></td></tr><% end %>
+              <% if @template_fields['guardian'].include?('address') %>
+                <tr><td>Cell Phone:</td><td><%= @user.guardian_cell_phone %></td></tr>
+                <tr><td>Home Phone:</td><td><%= @user.guardian_home_phone %></td></tr>
+              <% end %>
+              <% if @template_fields['guardian'].include?('work_phone') %><tr><td>Work Phone:</td><td><%= @user.guardian_work_phone %></td></tr><% end %>
+              <% if @template_fields['guardian'].include?('phone_preference') %><tr><td>Preferred Phone:</td><td><%= @user.guardian_phone_preference %></td></tr><% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% end %>
+
+    <% if @template_fields.include?('physician') %>
+      <div class="panel panel-success">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" href="#physician-panel"><i class="fa fa-plus"></i>Physician Information</a>
+            <% if current_user.is_partner? %>
+              <%= link_to '(Edit)', organization_user_edit_templates_path(@current_profile, @user, template: 'physician') %>
+            <% else %>
+              <%= link_to '(Edit)', user_edit_templates_path(current_user, template: 'physician') if current_user == @user %>
+            <% end %>
+          </h4>
+        </div>
+        <div id="physician-panel" class="panel-collapse collapse">
+          <table class="table table-condensed table-striped table-hover table-responsive">
+            <tbody>
+              <% if @template_fields['physician'].include?('name') %><tr><td>Physician:</td><td><%= @user.physician %></td></tr><% end %>
+              <% if @template_fields['physician'].include?('phone') %><tr><td>Physician Phone:</td><td><%= @user.physician_phone %></td></tr><% end %>
+              <% if @template_fields['physician'].include?('provider') %><tr><td>Insurance Provider:</td><td><%= @user.provider %></td></tr><% end %>
+              <% if @template_fields['physician'].include?('insurance_phone') %><tr><td>Provider Phone:</td><td><%= @user.provider_phone %></td></tr><% end %>
+              <% if @template_fields['physician'].include?('policy') %><tr><td>Provider Policy #:</td><td><%= @user.policy_number %></td></tr><% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% end %>
+
+    <% @applications.each do |application| %>
+      <div class="panel panel-success">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" href="#response-panel-<%= application.id %>"> <i class="fa fa-plus"></i><%= application.title %></a>
+            <% answer_set = @responses.find_by(form_id: application.id) %>
+            <% if answer_set && current_user.is_partner? %>
+              <%= link_to '(Edit)', edit_organization_user_custom_form_response_path(@current_profile, @user, answer_set) %>
+            <% elsif current_user.is_partner? %>
+            <% step_id = @user.steps.find_by(form_id: application.id).try(:id)%>
+              <%= link_to '(Edit)', new_organization_user_custom_form_response_path(@current_profile, @user, form_id: application.id, step_id: step_id) if step_id %>
+            <% elsif answer_set %>
+              <%= link_to '(Edit)', edit_user_custom_form_response_path(current_user, answer_set) %>
+            <% end %>
+          </h4>
+        </div>
+        <div id="response-panel-<%= application.id %>" class="panel-collapse collapse">
+          <table class="table table-condensed table-striped table-hover table-responsive">
+            <tbody>
+              <% application.questions.each do |field| %>
+                <% response = answer_set.response[field.id.to_s] if answer_set %>
+                <tr><th><%= field.question %></th></tr>
+                <tr><td><%= response.is_a?(Array) ? response.try(:delete_if, &:empty?).try(:join, ', ') : response %></td></tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% end %>
+    
+  </div>
+</div>

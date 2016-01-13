@@ -1,0 +1,31 @@
+<%= semantic_form_for [@current_profile, @form] do |f| %>
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <h4 class="panel-title"><%= @form.title.blank? ? 'Untitled Application' : @form.title %></h4>
+    </div>
+    <div class="panel-body">
+      <div class='row'>
+        <div class='col-md-12'>
+          <%= f.input :title, label: 'Form Name'  %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%= f.semantic_fields_for :questions do |q| %>
+    <%= render "question", q: q %>
+  <% end %>
+
+  <%= link_to_next_question(f) %><br><br>
+
+  <div class="panel panel-danger">
+    <div class="panel-heading">
+      <h4 class="panel-title">Important</h4>
+    </div>
+    <div class="panel-body">
+      <h5>Any changes made to forms <strong>after</strong> they are published will <strong>not</strong> apply to users that have <strong>already</strong> responded.</h5>
+      
+      <%= f.submit "Save Form", class: "btn btn-primary" %>
+    </div>
+  </div>
+<% end %>

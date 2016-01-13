@@ -1,0 +1,9 @@
+<%= semantic_form_for @search, url: path, method: :get do |f| %>
+  <div class='row'>
+    <%= render "search/#{partial}", f: f %>
+    <div class='form-group col-xs-6 col-sm-3 col-md-2 col-lg-2'>
+      <%= f.submit "Search", class: "btn btn-info btn-sm" %>
+      <%= link_to 'Reset', path, class: "btn btn-default btn-sm" %>
+    </div>
+  </div>
+<% end %>

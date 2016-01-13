@@ -1,0 +1,18 @@
+<% url_path = current_user.is_partner? ? organization_user_path(@current_profile, @user) : @user # allows partner or user to edit their profile %>
+<%= semantic_form_for @user, url: url_path do |f| %>
+  <%= hidden_field_tag :step_id, @step.id %>
+  <%= hidden_field_tag :template, @step.template %>
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <h4 class="panel-title">Physician Information</h4>
+    </div>
+    <div class="panel-body">
+      <%= f.input :physician, label: "Who is your primary care physician?" if @step.template_fields.include?('name')%>
+      <%= f.input :physician_phone, label: "What is the physician's phone number?" if @step.template_fields.include?('phone')%>
+      <%= f.input :provider, label: "Who is your medical insurance provider?" if @step.template_fields.include?('provider')%>
+      <%= f.input :provider_phone, label: "What is the insurance provider's phone number?" if @step.template_fields.include?('insurance_phone')%>
+      <%= f.input :policy_number, label: "What is the policy number?" if @step.template_fields.include?('policy')%>
+      <%= f.submit "Save & Continue", class: "btn btn-primary" %>
+    </div>
+  </div>
+<% end %>

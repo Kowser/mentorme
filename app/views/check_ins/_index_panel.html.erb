@@ -1,0 +1,58 @@
+<div class="panel panel-success" id="check-ins-index-panel">
+  <div class="panel-heading">
+    <h4 class="panel-title">Check-Ins (<%= @check_ins.total_entries %>)
+      <% if current_user.is_mentor? %>
+        <span class='pull-right'>
+          <%= link_to 'New Check-In', new_user_check_in_path(current_user), class: "btn btn-xs btn-success" %>
+        </span>
+      <% end %>
+    </h4>
+  </div>
+  <%= will_paginate @check_ins, renderer: BootstrapPagination::Rails %>
+  <table class="table table-condensed table-hover table-responsive">
+    <tr>
+      <th>Date</th>
+      <th>Mentor(s)</th>
+      <th>Mentee(s)</th>
+      <th>Time (Hrs)</th>
+      <th>Meeting Type</th>
+      <th><%= current_user.is_partner? ? "Ratings" : "Rated" %></th>
+      <th><i class="fa fa-file-image-o"></i></th>
+      <th><i class="fa fa-search"></i></th>
+    </tr>
+    <tbody>
+      <% @check_ins.each do |check_in| %>
+        <tr>
+          <td><%= check_in.date %></td>
+          <td>
+            <%= check_in.mentors.collect(&:name).join(', ') %>
+          </td>
+         <td>
+            <%= check_in.mentees.collect(&:name).join(', ') %>
+          </td>
+          <td><%= check_in.length %></td>
+          <td><%= check_in.meeting_type %></td>
+          <td>
+            <% unless current_user.is_partner? %>
+              <span class="label label-success">
+                <%= check_in.ratings.find_by(user: @current_profile).try(:rating) || "N/R" %>
+              </span>
+            <% else %>
+              <span class="label label-success">
+                <%= check_in.ratings.pluck(:rating).join(', ') %>
+              </span>
+            <% end %>
+          </td>
+          <td><%= check_in.attachments.count %></td>
+          <td>
+            <%= link_to 'View', polymorphic_path([@current_profile, check_in]) %>
+            <% unless current_user.is_partner? %>
+              | <%= link_to 'Edit', edit_polymorphic_path([@current_profile, check_in]) %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= will_paginate @check_ins, renderer: BootstrapPagination::Rails %>
+</div>

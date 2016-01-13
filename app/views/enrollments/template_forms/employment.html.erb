@@ -1,0 +1,39 @@
+<% url_path = current_user.is_partner? ? organization_user_path(@current_profile, @user) : @user # allows partner or user to edit their profile %>
+<%= semantic_form_for @user, url: url_path do |f| %>
+  <%= hidden_field_tag :step_id, @step.id %>
+  <%= hidden_field_tag :template, @step.template %>
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <h4 class="panel-title">Employment Information</h4>
+    </div>
+    <div class="panel-body">
+      <%= f.input :employer_name, label: "Employer Name" if @step.template_fields.include?('name') %>
+      <% if @step.template_fields.include?('address') %>
+        <div class='row'>
+          <div class='col-md-8'>
+            <%= f.input :employer_address1, label: "Employer's address" %>
+          </div>
+          <div class='col-md-4'>
+            <%= f.input :employer_address2, label: "Line 2 (optional)" %>
+          </div>
+        </div>
+        <div class='row'>
+          <div class='col-md-6'>
+            <%= f.input :employer_city %>
+          </div>
+          <div class='col-md-3'>
+            <%= f.input :employer_state, as: :select, collection: Collections::STATE %>
+          </div>
+          <div class='col-md-3'>
+            <%= f.input :employer_zip %>
+          </div>
+        </div>
+      <% end %>
+      <%= f.input :work_phone %>
+      <%= f.input :employer_job_title, label: "Job Title" if @step.template_fields.include?('title') %>
+      <%= f.input :employer_length, label: "How long with current employer?" if @step.template_fields.include?('length') %>
+      <%= f.input :work_phone if @step.template_fields.include?('work_phone') %>
+      <%= f.submit "Save & Continue", class: "btn btn-primary" %>
+    </div>
+  </div>
+<% end %>

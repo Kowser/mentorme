@@ -1,0 +1,6 @@
+<% provide(:header, "Congrats! Goal Verified!") %>
+<% content_for :body do %>
+  <p>Congrats on meeting your goal!</p>
+  <p><%= @goal.title %></p>
+<% end %>
+<%= render 'shared_mailer/mailer_template' %>

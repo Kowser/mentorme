@@ -1,0 +1,9 @@
+<%= f.input :match_id, as: :hidden, input_html: { value: match.id } %>
+<div class='row'>
+  <div class='col-md-6' id='mentors'>
+    <%= f.input :mentors, label: "Mentors present:", as: :check_boxes, collection: match.mentors %>
+  </div>
+  <div class='col-md-6' id='mentees'>
+    <%= f.input :mentees, label: "Mentees present:", as: :check_boxes, collection: match.mentees %>
+  </div>
+</div>

@@ -1,0 +1,105 @@
+<% if @user && (@user.try(:background_check) || 
+  @user.organizations_users.find_by(organization: (current_user.is_partner? ? @current_profile : @step.organization)).try(:background_passed))
+%>
+  <h3 class='text-center'><%= @step.try(:organization).try(:name) %> <%= "- Onboarding Process" if @step %></h3>
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <h4 class="panel-title">Background Check</h4>
+    </div>
+    <div class="panel-body">
+      <h4 class='text-center'>Good news! Looks like we already have a background check on file for <%= @user.name %>.</h4><br>
+      <% if current_user.is_partner? %>
+        <%= link_to 'New Background Check', new_organization_background_check_path(@current_profile), class: "btn btn-success" %>
+      <% else %>
+        <%= semantic_form_for current_user do |f| %>
+          <%= hidden_field_tag :step_id, @step.id %>
+          <%= f.input :template, as: :hidden %>
+          <%= f.submit "Continue", class: "btn btn-primary" %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+<% elsif @user %>
+  <h3 class='text-center'><%= @step.try(:organization).try(:name) %> <%= "- Onboarding Process" if @step %></h3>
+  <%= semantic_form_for [@current_profile, @background_check ||= BackgroundCheck.new] do |f| %>
+    <%= hidden_field_tag :step_id, @step.try(:id) %>
+    <%= f.input :validations, as: :hidden, input_html: { value: true } %>
+    <%= f.input :user_id, as: :hidden, input_html: { value: @user.id } %>
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <h4 class="panel-title">Background Check</h4>
+      </div>
+      <div class="panel-body">
+        <div class='row'>
+          <div class='col-md-4'>
+            <%= f.input :first_name, label: 'Legal First Name', required: true, input_html: { value: @background_check.first_name || @user.first_name } %>
+          </div>
+          <div class='col-md-4'>
+            <%= f.input :middle_name, required: false %>
+          </div>
+          <div class='col-md-4'>
+            <%= f.input :last_name, label: 'Legal Last Name', required: true, input_html: { value: @background_check.last_name || @user.last_name } %>
+          </div>
+        </div>
+        <div class='row'>
+          <div class='col-md-6'>
+            <%= f.input :email, required: true, input_html: { value: @background_check.email || @user.email } %>
+          </div>
+          <div class='col-md-4'>
+            <%= f.input :phone, required: true, input_html: { value: @background_check.phone || @user.preferred_phone } %>
+          </div>
+          <div class='col-md-2'>
+            <%= f.input :zipcode, required: true, label: 'Zip Code', input_html: { value: @background_check.zipcode || @user.zip } %>
+          </div>
+        </div>
+        <div class='row'>
+          <div class='col-md-3'>
+            <%= f.input :dob, required: true, label: 'Date of Birth', hint: 'YYYY/MM/DD', input_html: { value: @background_check.dob || @user.birth_date.try(:strftime, "%Y/%m/%d") } %>
+          </div>
+          <div class='col-md-3'>
+            <%= f.input :ssn, required: false, label: "Social Security Number", hint: "###-##-####" %>
+          </div>
+          <div class='col-md-4'>
+            <%= f.input :driver_license_number, required: false, label: "Current Driver's License #" %>
+          </div>
+          <div class='col-md-2'>
+            <%= f.input :driver_license_state, required: false, label: 'State', collection: Collections::STATE %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <h4 class="panel-title">Acknowledgement &amp; Authorization for Background Check</h4>
+      </div>
+      <div class="panel-body">
+        <div class='some-container'>
+          <p><%= Collections::BG_AUTHORIZATION.html_safe %></p>
+        </div>
+        <br>
+        <div class='col-md-6'>
+          <%= f.input :signature, label: "Signature (Full Name)" %>
+        </div>
+        <div class='col-md-6'>
+          <%= f.input :copy_requested, as: :boolean, label: "Optional consumer report copy", hint: "Minnesota / Oklahoma / California residents only" %>
+        </div>
+      </div>
+    </div>
+    <%= f.submit "Agree & Continue", class: "btn btn-primary" %>
+  <% end %>
+
+<% else %>
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <h4 class="panel-title">Background Check - Select Mentor</h4>
+    </div>
+    <div class="panel-body">
+      <%= semantic_form_for [@current_profile, BackgroundCheck.new], url: new_organization_background_check_path(@current_profile), method: :get do |f| %>
+        <%= f.input :user_id, label: 'Select mentor for background check', as: :select, collection: @current_profile.mentors.order(:first_name, :last_name) %>
+        <%= submit_tag "Find Mentor", class: "btn btn-primary" %>
+      <% end %>
+    <div>
+  <div>
+<% end %>

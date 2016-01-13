@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <%#= stylesheet_link_tag "application" %>
+    <!-- This stylesheet needs to be changed to an email only CSS file -->
+  </head>
+  <body>
+    <h2><%= @organization.try(:name) %></h2>
+    <h3><%= yield(:header) %></h3>
+    <br><br>
+    <%= yield(:body) %>
+  </body>
+</html>

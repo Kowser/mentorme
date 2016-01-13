@@ -1,0 +1,13 @@
+<div class="panel panel-danger">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      <a data-toggle="collapse" data-parent="#accordion" href="#<%= yield(:panel_title).gsub(" ", '-').downcase %>-panel"> <i id="expand-<%= yield(:panel_title).gsub(" ", '-').downcase %>-panel" class="fa fa-plus"></i><%= yield(:panel_title) %>
+      </a>
+    </h4>
+  </div>
+  <div id="<%= yield(:panel_title).gsub(" ", '-').downcase %>-panel" class="panel-collapse collapse">
+    <div class="panel-body">
+      <%= yield(:panel_content) %>
+    </div>
+  </div>
+</div>

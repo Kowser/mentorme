@@ -1,0 +1,25 @@
+<%= semantic_form_for [@current_profile, @enrollment] do |f| %>
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <h4 class="panel-title"><%= @enrollment.new_record? ? 'New' : 'Edit' %> Onboarding Process</h4>
+    </div>
+    <div class="panel-body">
+      <div class='row'>
+        <div class='col-md-8'>
+          <%= f.input :user_type, as: :select, label: "Who is this onboarding process for?", collection: Collections::USER_TYPES.invert, include_blank: "- Select -" %>
+        </div>
+        <div class='col-md-4'>
+          <%= f.input :active, as: :select, label: "Onboarding process is live?", include_blank: false %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%= f.semantic_fields_for :steps, @enrollment.steps do |s| %>
+    <%= render "step", s: s %>
+  <% end %>
+
+  <%= link_to_next_step(f) %><br><br>
+
+  <%= f.submit "Save", class: "btn btn-primary" %>
+  <br><br>
+<% end %>

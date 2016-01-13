@@ -1,0 +1,16 @@
+<% object.organizations_users.each do |ou| %>
+  <tr>
+    <td><%= ou.organization.name %></td>
+    <td class='text-center'><%= ou.umbrella_referral ? 'Yes' : 'No' %></td>
+    <td class='text-center'><%= ou.enrolled.try(:strftime, "%m/%d/%Y") %></td>
+    <% if current_user.is_partner? && ([@myorg] + @myorg.partners).include?(ou.organization) %>
+      <td class='text-center'>
+        <%= semantic_form_for ou, method: :patch, remote: true do |f| %>
+          <%= f.input :active, as: :select, collection: [['Yes', true], ['No', false]], label: false, include_blank: false %>
+        <% end %>
+      </td>
+    <% else %>
+      <td class='text-center'><%= ou.active ? 'Yes' : 'No' %></td>
+    <% end %>
+  </tr>
+<% end %>

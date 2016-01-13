@@ -1,0 +1,24 @@
+<% content_for :search do %>
+  <%= render_search_panel('matches', path: polymorphic_path([@current_profile, Match])) %>
+<% end %>
+
+<%= will_paginate @matches, renderer: BootstrapPagination::Rails %>
+<div class="panel panel-success">
+  <div class="panel-heading">
+    <h4 class="panel-title"><%= current_user.is_partner? ? 'Matches' : 'My Matches' %> (<%= @matches.total_entries %>)
+      <% if current_user.is_partner? %>
+        <span class='pull-right'>
+          <%= link_to 'New Match', new_organization_match_path(@current_profile), class: "btn btn-xs btn-success" %>
+        </span>
+      <% end %>
+    </h4>
+  </div>
+  <div class="panel-body">
+    <% @matches.each do |match| %>
+      <%= render 'row', match: match %>
+      <%= render 'admin/notes', object: match, collapse: true if current_user.is_partner? %>
+      <hr>
+    <% end %>
+  </div>
+</div>
+<%= will_paginate @matches, renderer: BootstrapPagination::Rails %>

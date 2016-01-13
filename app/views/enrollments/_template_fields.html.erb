@@ -1,0 +1,5 @@
+<% if ![nil, 'references', 'background'].include?(s.object.template) %>
+	<%= s.input :template_fields, as: :check_boxes, collection: "Collections::#{s.object.template.upcase}_TEMPLATE_FIELDS".constantize, label: 'Include which questions?'.html_safe %>
+<% elsif s.object.template == 'references' %>
+	<%= s.input :quantity, as: :radio, collection: [1,2,3], label: 'How many references?' %>
+<% end %>

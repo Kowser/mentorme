@@ -1,0 +1,39 @@
+<%= semantic_form_for [@current_profile, @email] do |f| %>
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <h4 class="panel-title"><%= @email.subject.blank? ? 'New Email' : @email.subject %></h4>
+    </div>
+    <div class="panel-body">
+      <label class="control-span">Who should receive this email?</label>
+      <div class='row'>
+        <div class='col-md-6'>
+          <% if f.object.new_record? %>
+            <%= f.input :recipient_staff, as: :check_boxes, label: false, collection: [["General Email (#{@current_profile.notification_email})", @current_profile.notification_email]], input_html: { checked: true } %>
+            <%= f.input :recipient_staff, as: :check_boxes, label: false, collection: @current_profile.staff.map { |s| [s.name, s.email] } %>
+          <% else %>
+          <%= f.input :recipient_staff, as: :check_boxes, label: false, collection: [["General Email (#{@current_profile.notification_email})", @current_profile.notification_email]].concat(@current_profile.staff.map { |s| [s.name, s.email] }) %>
+          <% end %>
+        </div>
+        <div class='col-md-6'>
+          <%= f.input :recipient_user, label: 'User (Mentor / Mentee)' %>
+        </div>
+      </div>
+      <div class='row'>
+        <div class='col-md-12'>
+          <%= f.input :recipient_misc, as: :string, label: false, hint: 'Additional emails, separate with ;' %>
+        </div>
+        <div class='col-md-12'>
+          <%= f.input :subject, label: 'Subject', placeholder: 'Profile complete! Next Step: Orientation' %>
+        </div>
+        <div class='col-md-12'>
+          <%= f.input :body, label: 'Body', input_html: { rows: 6 } %>
+        </div>
+        <div class='col-md-12'>
+          <%= f.input :text_message, hint: 'For users who receive text messages', label: 'Text Message', input_html: { rows: 2 } %>
+        </div>
+      </div>
+      <br>
+      <%= f.submit "Save Email", class: "btn btn-primary" %>
+    </div>
+  </div>
+<% end %>

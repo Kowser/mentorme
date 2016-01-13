@@ -1,0 +1,46 @@
+<div class="panel panel-success">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      Top <%= @results.length %> match result(s) for: <%= @matchee.name %>
+      <span class='pull-right'>
+        <%= link_to 'New Search', organization_find_matches_path(@current_profile), class: "btn btn-xs btn-success" %>
+      </span>
+    </h4>
+  </div>
+  <% if @results.empty? %>
+    <ul class='list-group'>
+      <li class="list-group-item"><strong>Uh oh! There were no results! To show up in results, users must...</strong></li>
+      <li class="list-group-item">... be active.</li>
+      <li class="list-group-item">... be the same gender.</li>
+      <li class="list-group-item">... have filled out a program application.</li>
+      <li class="list-group-item">... have <strong>passed</strong> a background check, if applicable.</li>
+    </ul>
+  <% else %>
+    <%= semantic_form_for [@current_profile, Match.new], remote: true do |f| %>
+      <%= hidden_field_tag "[match][#{@matchee.user.role.downcase}_ids][]", @matchee.id %>
+      <table class="table table-condensed table-striped table-hover table-responsive">
+        <tbody>
+          <tr>
+            <th class='check-box'><i class="fa fa-check"></i></th>
+            <th>Match Name</th>
+            <th class='text-left'>Match (%)</th>
+          </tr>
+          <% @results.each_pair do |result, score| %>
+            <tr>
+              <td><%= check_box_tag @check_boxes, result.id %></td>
+              <td><%= link_to result.name, polymorphic_path([@current_profile, result]), target: "_blank" %></td>
+              <td class='text-left'><%= score %>%</td>
+            </tr>
+          <% end %>
+          <tr class='search'>
+            <td colspan="2"><%= f.input :staff, label: false, collection: @current_profile.staff, include_blank: '- Assign Member -' %>
+            </td>
+            <td class='text-left'>
+              <%= f.submit 'Create Match', class: "btn btn-sm btn-success", data: { disable_with: "Creating..." } %>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    <% end %>
+  <% end %>
+</div>

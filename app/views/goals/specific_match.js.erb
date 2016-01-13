@@ -1,0 +1,5 @@
+<% semantic_fields_for Goal.new do |f| %>
+	$('div#match_ids').empty().append("<%= j hidden_field_tag 'match_ids[]', @match.id %>");
+	$('div#goal_assignees_input').replaceWith("<%= j f.input :assignees, label: 'Assignee(s)', as: :select,
+		collection: ['Everyone', 'Mentors', 'Mentees'] + (@match.mentors + @match.mentees).map { |m| m.name }, include_blank: false %>");
+<% end %>

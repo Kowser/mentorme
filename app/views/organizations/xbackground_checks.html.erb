@@ -1,0 +1,29 @@
+<%#= render_search_panel('references', path: organization_background_checks_path(@current_profile)) %>
+
+<div class="panel panel-success">
+  <div class="panel-heading">
+    <h4 class="panel-title">Background Checks (<%= @background_checks.count %>)</h4>
+  </div>
+   <table class="table table-condensed table-hover table-responsive">
+    <tr>
+      <th>Mentor</th>
+      <th>Submitted</th>
+      <th>Last Updated</th>
+      <th>Report copy</th>
+      <th>Status</th>
+    </tr>
+    <tbody>
+      <% @background_checks.each do |check| %>
+        <tr class='warning'>
+          <td><%= check.user.name %></td>
+          <td><%= check.created_at.try(:strftime, "%m/%d/%Y") %></td>
+          <td><%= check.updated_at.try(:strftime, "%m/%d/%Y") %></td>
+          <td><%= check.report? ? 'Yes' : 'No' %></td>
+          <td><%= check.status %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<%= will_paginate @background_checks, renderer: BootstrapPagination::Rails %>

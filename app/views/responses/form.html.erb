@@ -1,0 +1,24 @@
+<%= semantic_form_for @object do |f| %>
+  <div class="panel panel-info">
+    <div class="panel-heading"><%= @response.form.title %></div>
+    <div class="panel-body">
+      <%= hidden_field_tag :step_id, @step.try(:id) %>
+      <%= f.input :form_id, as: :hidden %>
+      <%= f.semantic_fields_for :response, OpenStruct.new(@response.response) do |q| %>
+        <% @response.form.questions.each do |field| %>
+          <% if field.question_type == "text" %>
+            <%= q.input "#{field.id}", label: field.question, as: 'text', hint: field.hint, required: field.required, input_html: { rows: 3 } %>
+          <% else %>
+            <%= q.input "#{field.id}", label: field.question, as: field.question_type, hint: field.hint, required: field.required,
+            collection: field.collection.split(';') %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <% if @preview %>
+        <span class="btn btn-primary">Preview Only</span>
+      <% else %>
+        <%= f.submit "Submit", class: "btn btn-primary" %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

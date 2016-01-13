@@ -1,0 +1,127 @@
+<div class="panel panel-success">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      Custom Applications
+      <span class='pull-right'>
+        <%= link_to 'New Application', new_organization_custom_form_path(@current_profile), class: "btn btn-xs btn-success" %>
+      </span>
+    </h4>
+  </div>
+  <table class="table table-condensed table-hover table-responsive">
+    <tr>
+      <th class='text-center'><i class="fa fa-search"></i></th>
+      <th>Title</th>
+      <th class='text-center'>Questions</th>
+      <th class='text-center'>Responses</th>
+      <th class='text-center'>Revised By</th>
+      <th class='text-center'>Revised</th>
+      <th><i class="fa fa-trash-o"></i></th>
+    </tr>
+    <tbody>
+      <% @forms.each do |form| %>
+        <tr>
+          <td class='text-center'>
+            <%= link_to organization_custom_form_preview_path(@current_profile, form) do %>
+              <i class="fa fa-file-text-o"></i>
+            <% end %>
+          </td>
+          <td><%= link_to form.title, edit_organization_custom_form_path(@current_profile, form) %></td>
+          <td class='text-center'><%= form.questions.count %></td>
+          <td class='text-center'><%= form.responses.count %></td>
+          <td class='text-center'><%= form.author %></td>
+          <td class='text-center'><%= form.updated_at.try(:strftime, "%m/%d/%Y") %></td>
+          <td>
+            <%= link_to organization_custom_form_path(@current_profile, form), method: :delete, class: "destroy", remote: true do %>
+              <i class="fa fa-trash-o"></i>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div class="panel panel-success">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      Custom Emails
+      <span class='pull-right'>
+        <%= link_to 'New Email', new_organization_custom_email_path, class: "btn btn-xs btn-success" %>
+      </span>
+    </h4>
+  </div>
+  <table class="table table-condensed table-hover table-responsive">
+    <tr>
+      <th class='text-center'><i class="fa fa-search"></i></th>
+      <th>Subject</th>
+      <th class='text-center'>Recipients</th>
+      <th class='text-center'>Revised By</th>
+      <th class='text-center'>Revised</th>
+      <th><i class="fa fa-trash-o"></i></th>
+    </tr>
+    <tbody>
+      <% @emails.each do |email| %>
+        <tr>
+          <td class='text-center'>
+            <%= link_to organization_custom_email_preview_path(@current_profile, email) do %>
+              <i class="fa fa-file-text-o"></i>
+            <% end %>
+          </td>
+          <td><%= link_to email.subject, edit_organization_custom_email_path(@current_profile, email) %></td>
+          <td class='text-center'><%= email.recipient_count %></td>
+          <td class='text-center'><%= email.author %></td>
+          <td class='text-center'><%= email.updated_at.try(:strftime, "%m/%d/%Y") %></td>
+          <td>
+            <%= link_to organization_custom_email_path(@current_profile, email), method: :delete, class: "destroy", remote: true do %>
+              <i class="fa fa-trash-o"></i>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div class="panel panel-success">
+  <div class="panel-heading">
+    <h4 class="panel-title">Custom Onboarding
+      <span class='pull-right'>
+        <%= link_to 'Create New Onboarding Process', new_organization_enrollment_path(@current_profile), class: "btn btn-xs btn-success" %>
+      </span>
+    </h4>
+  </div>
+  <table class="table table-condensed table-hover table-responsive">
+    <tr>
+      <th class='text-center'><i class="fa fa-search"></i></th>
+      <th>Onboarding for</th>
+      <th class='text-center'>Steps</th>
+      <th class='text-center'>Active</th>
+      <th class='text-center'>Progress</th>
+      <th class='text-center'>Author</th>
+      <th class='text-center'>Revised</th>
+      <th><i class="fa fa-trash-o"></i></th>
+    </tr>
+    <tbody>
+      <% @enrollments.each do |enrollment| %>
+        <tr>
+          <td class='text-center'>
+            <%= link_to organization_enrollment_preview_path(@current_profile, enrollment) do %>
+              <i class="fa fa-file-text-o"></i>
+            <% end %>
+          </td>
+          <td><%= link_to Collections::USER_TYPES[enrollment.user_type], edit_organization_enrollment_path(@current_profile, enrollment) %></td>
+          <td class='text-center'><%= enrollment.steps.count %></td> 
+          <td class='text-center'><%= enrollment.active ? "Yes" : "No" %></td>
+          <td class='text-center'><%= enrollment.active ? (link_to 'Report', organization_enrollment_report_path(@current_profile, enrollment)) : 'Inactive' %></td>
+          <td class='text-center'><%= enrollment.author %></td>
+          <td class='text-center'><%= enrollment.updated_at.try(:strftime, "%m/%d/%Y") %></td>
+          <td>
+            <%= link_to organization_enrollment_path(@current_profile, enrollment), method: :delete, class: "destroy", remote: true do %>
+              <i class="fa fa-trash-o"></i>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

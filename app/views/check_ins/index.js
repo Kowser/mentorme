@@ -1,0 +1,1 @@
+$('#check-ins-index-panel').replaceWith("<%= j render 'index_panel' %>");

@@ -1,0 +1,6 @@
+<% provide(:header, "You've been matched!") %>
+<% content_for :body do %>
+	<p>Hey <%= @user.first_name %>!<p>
+  <p>We wanted to let you know you've been matched! Login and find out who it is...</p>
+<% end %>
+<%= render 'shared_mailer/mailer_template' %>

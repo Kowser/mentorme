@@ -1,0 +1,40 @@
+<div class="panel panel-info">
+  <div class="panel-heading">
+    <h4 class="panel-title">Edit Name / Login</h4>
+  </div>
+  <%= semantic_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f| %>
+    <div class="panel-body">
+      <div class='row'>
+        <div class='col-sm-6'>
+          <h4>Edit Name / Login</h4>
+          <div class='row'>
+            <div class='col-sm-6'>
+              <%= f.input :first_name %>
+            </div>
+            <div class='col-sm-6'>
+              <%= f.input :last_name %>
+            </div>
+          </div>
+          <%= f.input :login, placeholder: 'Your email or phone', label: 'Login: A valid phone or email', hint: "Please enter a cell phone number or email address you'd like to use to sign in." %>
+          <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+            Currently waiting confirmation for: <%= resource.unconfirmed_email %>
+          <% end %>
+        </div>
+        <div class='col-sm-6'>
+          <h4>Change Password <i>(leave blank to keep as-is)</i></h4>
+          <%= f.input :password, :autocomplete => "off", label: 'New Password' %>
+          <%= f.input :password_confirmation, label: "New Password Confirmation" %>
+        </div>
+      </div>
+      <hr>
+      <div class='row'>
+        <div class='col-sm-6'>
+          <%= f.input :current_password, label: 'Enter current password to confirm changes' %><%= f.submit "Update", class: 'btn btn-primary'%>
+        </div>
+        <div class='col-sm-6'>
+          <br>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

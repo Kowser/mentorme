@@ -1,0 +1,5 @@
+$('div#new-note-object-<%= @note.notable_id %>').replaceWith("<%= j render 'notes/form', note: @note %>");
+$("form#new_note").find("input[value='Submit']").click(function(){
+  // $this.submit();
+  $("form#new_note").find("input[value='Submit']").submit();
+});

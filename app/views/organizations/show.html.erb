@@ -1,0 +1,118 @@
+<div class="panel panel-success">
+  <div class="panel-heading">
+    <h4 class="panel-title">Organization Overview</h4>
+  </div>
+  <table class="table table-condensed table-striped table-hover table-responsive">
+    <thead>
+      <tr>
+        <th>Organization Name</th>
+        <th class='text-center hidden-sm'>Staff</th>
+        <th class='text-center'>Mentors</th>
+        <th class='text-center'>Mentees</th>
+        <th class='text-center'>Matches</th>
+        <th class='text-center'>Check-Ins</th>
+        <th class='text-center hidden-sm'><i class="fa fa-check"></i>Goals </th>
+        <th class='text-center hidden-sm'><i class="fa fa-times"></i>Goals</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @orgs.each do |org| %>
+        <tr>
+          <td><%= org.name %></td>
+          <td class='text-center hidden-sm'><%= org.staff.count %></td>
+          <td class='text-center'><%= org.mentors.count %></td>
+          <td class='text-center'><%= org.mentees.count %></td>
+          <td class='text-center'><%= org.matches.count %></td>
+          <td class='text-center'><%= org.check_ins.count %></td>
+          <td class='text-center hidden-sm'><%= org.goals.where(completed: true).count %></td>
+          <td class='text-center hidden-sm'><%= org.goals.where(completed: false).count %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div class="panel panel-success">
+  <div class="panel-heading">
+    <h4 class="panel-title"><%= @current_profile.name %> Dashboard</h4>
+  </div>
+  <table class="table table-condensed table-striped table-hover table-responsive">
+    <thead>
+      <tr>
+        <th>Activity</th>
+        <th class='text-center'>Mentors</th>
+        <th class='text-center'>Mentees</th>
+        <th class='text-center'>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Unmatched Users:</td>
+        <td class='text-center'><%= t1 = @current_profile.unmatched(:mentors) %></td>
+        <td class='text-center'><%= t2 = @current_profile.unmatched(:mentees) %></td>
+        <td class='text-center'><%= t1 + t2 %></td>
+      </tr>
+      <tr>
+        <td>Conversions / Last Month:</td>
+        <td class='text-center'><%= t1 = @current_profile.monthly_conversions(:mentors) %> %</td>
+        <td class='text-center'><%= t2 = @current_profile.monthly_conversions(:mentees) %> %</td>
+        <td class='text-center'>--</td>
+      </tr>
+      <tr>
+        <td>Total Conversions (% matched)</td>
+        <td class='text-center'><%= @current_profile.total_conversions[:mentors] %> %</td>
+        <td class='text-center'><%= @current_profile.total_conversions[:mentees] %> %</td>
+        <td class='text-center'><%= @current_profile.total_conversions[:total] %> %</td>
+      </tr>
+
+      <tr>
+        <td>Sign Ups / Week</td>
+        <td class='text-center'><%= t1 = @current_profile.signups(:mentors, :week) %></td>
+        <td class='text-center'><%= t2 = @current_profile.signups(:mentees, :week) %></td>
+        <td class='text-center'><%= t1 + t2 %></td>
+      </tr>
+      <tr>
+        <td>Sign Ups / Month</td>
+        <td class='text-center'><%= t1 = @current_profile.signups(:mentors, :month) %></td>
+        <td class='text-center'><%= t2 = @current_profile.signups(:mentees, :month) %></td>
+        <td class='text-center'><%= t1 + t2 %></td>
+      </tr>
+      <tr>
+        <td>Check-Ins / Week:</td>
+        <td class='text-center'><%= t1 = @current_profile.new_check_ins(:mentors, :week) %></td>
+        <td class='text-center'><%= t2 = @current_profile.new_check_ins(:mentees, :week) %></td>
+        <td class='text-center'><%= t1 + t2 %></td>
+      </tr>
+      <tr>
+        <td>Check-Ins / Month:</td>
+        <td class='text-center'><%= t1 = @current_profile.new_check_ins(:mentors, :month) %></td>
+        <td class='text-center'><%= t2 = @current_profile.new_check_ins(:mentees, :month) %></td>
+        <td class='text-center'><%= t1 + t2 %></td>
+      </tr>
+      <tr>
+        <td>Unhappy Check-Ins / Week:</td>
+        <td class='text-center'><%= t1 = @current_profile.unhappy_check_ins(:mentor, :week) %></td>
+        <td class='text-center'><%= t2 = @current_profile.unhappy_check_ins(:mentee, :week) %></td>
+        <td class='text-center'><%= t1 + t2 %></td>
+      </tr>
+      <tr>
+        <td>Unhappy Check-Ins / Month:</td>
+        <td class='text-center'><%= t1 = @current_profile.unhappy_check_ins(:mentor, :month) %></td>
+        <td class='text-center'><%= t2 = @current_profile.unhappy_check_ins(:mentee, :month) %></td>
+        <td class='text-center'><%= t1 + t2 %></td>
+      </tr>
+      <tr>
+        <td>Goals Completed / Week</td>
+        <td></td>
+        <td></td>
+        <td class='text-center'><%= @current_profile.goals_completed(:week) %></td>
+      </tr>
+      <tr>
+        <td>Goals Completed / Month</td>
+        <td></td>
+        <td></td>
+        <td class='text-center'><%= @current_profile.goals_completed(:month) %></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

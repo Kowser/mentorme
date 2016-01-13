@@ -1,0 +1,21 @@
+<%= semantic_form_for @organization do |f| %>
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <h4 class="panel-title"><%= @organization.name %>: Preferences</h4>
+    </div>
+    <div class="panel-body">
+      <h5>Does your organization use any of the following features of MentorMe?</h5>
+      <hr>
+      <div class='row'>
+        <div class='col-sm-4'>
+          <%= f.input :use_references, as: :radio, label: "References" %>
+        </div>
+        <div class='col-sm-4'>
+          <%#= f.input :use_background_checks, as: :radio, label: "Background Checks" %>
+        </div>
+      </div>
+      <br>
+      <%= f.submit "Save Preferences", class: "btn btn-primary" %>
+    </div>
+  </div>
+<% end %>

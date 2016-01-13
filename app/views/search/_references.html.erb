@@ -1,0 +1,3 @@
+<div class='col-xs-6 col-sm-4 col-md-3 col-lg-4'><%= f.input :keyword, as: :string, label: false, placeholder: "Search by user or reference name" %></div>
+<div class='col-xs-6 col-sm-2 col-md-2 col-lg-2'><%= f.input :completed, as: :select, label: false, include_blank: '- Completed -', collection: [['Yes', true], ['No', 'false']] %></div>
+<div class='col-xs-6 col-sm-2 col-md-2 col-lg-2'><%= f.input :contacted, as: :select, label: false, include_blank: '- Contacted -', collection: [['Yes', true], ['No', 'false']] %></div>

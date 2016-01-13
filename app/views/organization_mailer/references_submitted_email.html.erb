@@ -1,0 +1,5 @@
+<% provide(:header, "Mentor references submitted") %>
+<% content_for :body do %>
+	<p>The references for <%= @user.name %> have all been submitted and are ready for review.</p>
+<% end %>
+<%= render 'shared_mailer/mailer_template' %>

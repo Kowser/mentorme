@@ -1,0 +1,48 @@
+<div class="panel panel-info">
+  <div class="panel-heading">
+    <h4 class="panel-title">Match Maestro</h4>
+  </div>
+  <div class="panel-body">
+    <div class="row">
+      <div class='col-md-4 col-md-offset-4'>
+        <%= semantic_form_for :select do |t| %>
+          <%= t.input :type, label: "Find matches for a", collection: ['Mentor', 'Mentee'], include_blank: "-- Choose Type --" %>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class='col-md-4 col-md-offset-4'>
+        <%= semantic_form_for :match, url: organization_find_results_path(@current_profile), method: :post do |f| %>
+          <span id="profile-collection"></span>
+          <script type="text/javascript">
+            $("#select_type").change(function() {
+              var type = $(this).val();
+              $("span#profile-collection").empty();
+              if (type === "Mentor") {
+                $("span#profile-collection").append(
+                  "<%= j f.input :mentor_id, label: false, as: :select, collection: @mentors, include_blank: '- Qualified Mentors -' %>" +
+                  "<%= j f.submit 'Search', class: 'btn btn-info', data: { disable_with: 'Searching...' } %>"
+                );
+              } else if (type === "Mentee") {
+                $("span#profile-collection").append(
+                  "<%= j f.input :mentee_id, label: false, as: :select, collection: @mentees, include_blank: '- Qualified Mentees - ' %>" +
+                  "<%= j f.submit 'Search', class: 'btn btn-info', data: { disable_with: 'Searching...' } %>"
+                );
+              }
+            });
+          </script>
+        <% end %>
+      </div>
+    </div>
+
+    <dl class="dl-horizontal">
+      <dt>Qualified Mentors</dt>
+      <dd>Have completed and <strong>passed</strong> a background check.</dd>
+      <dd>Have completed the program application.</dd>
+      <br>
+      <dt>Qualified Mentees</dt>
+      <dd>Have completed the program application.</dd>
+    </dl>
+  </div>
+</div>

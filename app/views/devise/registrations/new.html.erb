@@ -1,0 +1,89 @@
+<% provide(:title, "Sign Up") %>
+
+<% content_for :form do %>
+  <div class="float-form-bubble">
+    STEP 1 Let's get some basic info
+  </div>
+
+  <div class="float-form-content">
+    <%= semantic_form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
+      <label>No labels? Mouse over boxes</label>
+      <div class='row'>
+        <div class='col-xs-6 first_name_box' title="Hi, what's your first name?">
+          <%= f.input :first_name, label: false, placeholder: 'First Name' %>
+        </div>
+        <div class='col-xs-6 last_name_box' title="Hi, what's your last name?">
+          <%= f.input :last_name, label: false, placeholder: 'Last Name' %>
+        </div>
+      </div>
+      <div title="Your email or phone (login)?">
+        <%= f.input :login, label: false, placeholder: 'Your email or phone (login)?' %>
+      </div>
+      <div title="Password">
+        <%= f.input :password, label: false, as: :password, placeholder: 'Password' %>
+      </div>
+      <div title="Confirm Password">
+        <%= f.input :password_confirmation, label: false, as: :password, placeholder: 'Confirm Password' %>
+      </div>
+      <%= f.input :role, label: false, as: :select, include_blank: false,
+        collection: ['Mentor','Mentee'], include_blank: "I'm signing up as a..." %>
+      <%= f.semantic_fields_for :organizations_users, resource.organizations_users.build do |ou| %>
+        <%= ou.input :organization_id, as: :hidden, input_html: { value: @organization.id } %>
+      <% end %>
+
+      <%= f.submit 'Sign Up', class: 'btn btn-info' %>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="steps-stripe">
+  <h3 class='text-center'><%= @organization.name %> uses MentorMe to manage its mentoring program. With MentorMe, you can join our program in just 3 easy steps.</h3>
+  <div class="row">
+    <div class="col-sm-4">
+      <dl>
+        <dt><div class="count">1</div></dt>
+        <dd><h1>Sign Up<h1></dd>
+      </dl>
+      <p>Get started by providing us with some basic info.</p>
+    </div>
+    <div class="col-sm-4">
+      <dl>
+        <dt><div class="count">2</div></dt>
+        <dd><h1>Get Matched<h1></dd>
+      </dl>
+      <p><%= @organization.name %> will match you with the best mentor or mentee for you.</p>
+    </div>
+    <div class="col-sm-4">
+      <dl>
+        <dt><div class="count">3</div></dt>
+        <dd><h1>Get Started!<h1></dd>
+      </dl>
+      <p>We'll activate your account and provide you with the tools you need to have a great mentoring experience.</p>
+    </div>
+  </div>
+</div>
+
+<div class="black-stripe">
+  <div class="row">
+    <div class="col-sm-4">
+      <h2>About Us</h2>
+      <p><%= @organization.about_us %></p>
+    </div>
+    <div class="col-sm-4">
+      <h2>Contact Us</h2>
+      <div class="text-left">
+        E-mail: <a href="mailto:<%= @organization.contact_email %>"><%= @organization.contact_email %></a><br>
+        Website: <a href="<%= @organization.url %>" target="_blank"><%= @organization.url %></a><br>
+        Tech Support: <a href="mailto:support@getmentorme.com>">support@getmentorme.com</a>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <h2>Connect with Us</h2>
+      <%= link_to image_tag('icons/twitter_org.png', alt: 'Facebook Us'), @organization.twitter_link, target: "_blank" %>
+      <%= link_to image_tag('icons/facebook_org.png', alt: 'Facebook Us'), @organization.fb_link, target: "_blank" %>
+    </div>
+  </div>
+  <div class="mixpanel-badge">
+    <a href="https://mixpanel.com/f/partner"><img src="//cdn.mxpnl.com/site_media/images/partner/badge_light.png" alt="Mobile Analytics" /></a>
+  </div>
+</div>

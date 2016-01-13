@@ -1,0 +1,39 @@
+<div class="panel panel-info <%= 'hidden' if q.object.marked_for_destruction? %>">
+  <div class="panel-heading">
+    <a data-toggle="collapse" href="#question-<%= q.options[:child_index] %>">
+      <%#= q.object.question.blank? ? "Blank Question" : q.object.question %>
+      <i class="fa fa-plus"></i>Question<%= q.object.new_record? ? "" : " #{q.index.to_i + 1}" %>: <%= q.object.question.blank? ? "New" : q.object.question %>
+    </a>
+    <span class='pull-right'>
+      <%= link_to '#', class: "trash" do %>
+        <i class="fa fa-trash-o"></i>
+      <% end %>
+    </span>
+  </div>
+  <div id="question-<%= q.options[:child_index] %>" class="panel-collapse <%= q.object.question.blank? || q.object.errors.any? ? 'in' : 'collapse' %>">
+    <div class="panel-body">
+      <%= q.input :_destroy, as: :hidden %>
+      <%= q.input :id, as: :hidden %>
+      <div class='row'>
+        <div class='col-md-1'>
+          <%= q.input :sequence, as: :string, label: 'Order', hint: "1,2,etc..." %>
+        </div>
+        <div class='col-md-8'>
+          <%= q.input :question %>
+        </div>
+        <div class='col-md-3'>
+          <%= q.input :required, as: :select, label: "Question required?", include_blank: false %>
+        </div>
+      </div>
+      <div class='row'>
+        <div class='col-md-9'>
+          <%= q.input :hint, label: "Question Hint (optional)", hint: "This sentence is an example of a hint" %>
+        </div>
+        <div class='col-md-3'>
+          <%= q.input :question_type, as: :select, label: 'Question Type', collection: Collections::QUESTION_TYPE, include_blank: '-- Choose --' %>
+        </div>
+      </div>
+      <%= q.input :collection, as: :text, label: "Leave blank if 'Question Type' is Text, otherwise separate with ;", hint: "Hint: Hit return after semi-colon for a cleaner list.", input_html: { rows: 3, value: q.object.answer_set } %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,125 @@
+<div class="panel panel-info">
+  <div class="panel-heading">
+    <h4 class="panel-title"><%= @check_in.new_record? ? 'New Check-In' : 'Check-In' %></h4>
+  </div>
+  <div class="panel-body">
+    <%= semantic_fields_for @match do |f| %>
+      <%= f.input :id, label: "Match:", as: :select, include_blank: false, collection: @current_user.matches.map { |m| [m.name, m.id]}, 
+        input_html: { disabled: !@check_in.new_record? } %>
+    <% end %>
+  </div>
+
+  <%= semantic_form_for [current_user, @check_in] do |f| %>
+    <div class="panel-body">
+      <% if current_user.is_mentor? %>
+        <%= hidden_field_tag :override, params[:override] %>
+        <div id='attendees'>
+          <%= render 'attendees', f: f, match: @match %>
+        </div>
+        <br>
+        <div class='row'>
+          <div class='col-md-4'>
+            <%= f.input :date, label: "When did you meet? (m/d/y)", as: :string, input_html: { value: f.object.date.try(:strftime, "%m/%d/%Y") }  %>
+          </div>
+          <div class='col-md-4'>
+            <%= f.input :next_date, label: "When's your next meeting? (m/d/y)", as: :string, input_html: { value: f.object.next_date.try(:strftime, "%m/%d/%Y") } %>
+          </div>
+          <div class='col-md-4'>
+            <%= f.input :length, label: "How long did you meet? (hrs.)", as: :select, collection: Collections::CHECK_IN_LENGTH %>
+          </div>
+          <div class='col-md-4'>
+            <%= f.input :meeting_type, label: "How did you meet?", as: :select, collection: Collections::CHECK_IN_MEETING_TYPE %>
+          </div>
+          <div class='col-md-4'>
+            <%= f.input :location, label: "Where did you meet?", hint: 'Required if meeting in person' %>
+          </div>
+        </div>
+
+      <% elsif current_user.is_mentee? %>
+        <strong>Date:</strong> <%= @check_in.date.strftime("%m/%d/%Y") %><br>
+        <strong>Met:</strong> <%= @check_in.meeting_type %><br>
+        <strong>Where:</strong> <%= @check_in.location %><br>
+        <br>
+        <strong>Who was there?:</strong><br>
+        <% (@check_in.mentors + @check_in.mentees).each do |person| %>
+          <%= person.name %><br>
+        <% end %><br>
+        <strong>Next Meeting Scheduled:</strong> <%= @check_in.next_date.strftime("%m/%d/%Y") %><br>
+      <% end %>
+    </div>
+
+    <div class="panel-info">
+      <div class="panel-heading">
+        <h4 class="panel-title">Want to attach a photo?</h4>
+      </div>
+      <table class="table table-condensed table-striped table-hover table-responsive">
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th>Photo Name</th>
+            <th>Uploaded By</th>
+            <th>Uploaded On</th>
+            <th><i class="fa fa-trash-o"></i></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @check_in.attachments.each do |attachment| %>
+            <tr>
+              <td><%= attachment.description %></td>
+              <td><%= link_to attachment.document_file_name, attachment.document.url %></td>
+              <td><%= attachment.user.try(:name) %></td>
+              <td><%= attachment.created_at.try(:strftime, "%m/%d/%Y") %></td>
+              <td>
+                <% if attachment.user == current_user %>
+                  <%= link_to attachment, method: :delete, class: 'delete-file-link', data: { disable_with: "Deleting..." }, remote: true do %>
+                    <i class="fa fa-trash-o"></i>
+                  <% end %>
+                <% end %>
+              </td>
+            </tr>
+          <% end unless @check_in.new_record? %>
+        </tbody>
+        <tfoot>
+          <tr class="well">
+            <td colspan='8'>
+              <%= f.semantic_fields_for :attachments, @check_in.attachments.build do |a| %>
+                <%= a.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
+                <div class='row'>
+                  <div class='col-md-6'>
+                    <%= a.input :description, label: false, hint: "Enter Description (optional)" %>
+                  </div>
+                  <div class='col-md-4'>
+                    <%= a.input :document, label: false, as: :file, required: false %>
+                  </div>
+                </div>
+              <% end %>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <div class='panel-info'>
+      <div class="panel-heading">
+        <h4 class="panel-title">Private (not shown to match)</h4>
+      </div>
+    </div>
+    <div class="panel-body">
+      <label>Rating: How did you feel about this meeting? (Required)</label><br>
+      <div class='rating'>
+        <%= f.semantic_fields_for :ratings, @rating do |r| %>
+          <%= r.input :rating, label: false, as: :radio, collection: {
+            image_tag('ratings/5.png') => 5,
+            image_tag('ratings/4.png') => 4,
+            image_tag('ratings/3.png') => 3,
+            image_tag('ratings/2.png') => 2,
+            image_tag('ratings/1.png') => 1
+          } %>
+          <%= r.input :notes, as: :text, label: "Tell us more about what you did (Required)", input_html: { rows: 3 } %>
+          <%= r.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
+        <% end %>
+      </div>
+      <%= f.submit "Check-In", class: "btn btn-info" %>
+    </div>
+  <% end %>
+</div>

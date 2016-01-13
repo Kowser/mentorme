@@ -1,0 +1,6 @@
+<% provide(:header, "Hooray! A new #{@user.role} just registered:") %>
+<% content_for :body do %>
+  Name: <%= @user.name %><br>
+  Login: <%= @user.login %>
+<% end %>
+<%= render 'shared_mailer/mailer_template' %>

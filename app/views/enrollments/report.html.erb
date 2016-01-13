@@ -1,0 +1,69 @@
+<div class="panel panel-success">
+  <div class="panel-heading">
+    <h4 class="panel-title"><%= Collections::USER_TYPES[@enrollment.user_type] %> - Progress Report
+      <span class='pull-right'>Active Users: <%= @user_ids.count %></span>
+    </h4>
+  </div>
+
+  <table class="table table-ultra-condensed table-responsive">
+    <tbody>
+      <% index = 1 %>
+      <% @enrollment.steps.each do |step| %>
+        <% completed_user_ids = step.statuses.where(completed: true).pluck(:user_id) %>
+        <% incomplete_user_ids = @user_ids - completed_user_ids %>
+        <tr>
+          <th colspan='6'>
+            <h4><a data-toggle="collapse" data-parent="#accordion" data-target=".step-<%= index %>"><i class="fa fa-plus"></i>Step <%= index %>: <%= step.title %></a>
+              <span class='pull-right'>Incomplete: <%= incomplete_user_ids.count %></span>
+            </h4>
+          </th>
+        </tr>
+        <% @current_profile.users.where(id: incomplete_user_ids).order(:first_name).in_groups_of(3, false) do |users| %>
+          <tr class="collapse step-<%= index %>">
+            <% users.each do |user| %>
+              <td><%= user.name %></td><td><%= link_to 'View', organization_user_path(@current_profile, user.id) %></td>
+            <% end %>
+          </tr>
+        <% end %>
+        <% index += 1 %>
+
+        <% if step.template == 'references' %>
+          <% references_unsubmitted_user_ids = @current_profile.organizations_users.where(user_id: (@user_ids - incomplete_user_ids), references_submitted: false).pluck(:user_id) %>
+          <tr>
+            <th colspan='6'>
+              <h4><a data-toggle="collapse" data-parent="#accordion" data-target=".step-<%= index %>"><i class="fa fa-plus"></i>Step <%= index %>: References Submitted</a>
+                <span class='pull-right'>Waiting: <%= references_unsubmitted_user_ids.count %></span>
+              </h4>
+            </th>
+          </tr>
+          <% @current_profile.users.where(id: references_unsubmitted_user_ids).order(:first_name).in_groups_of(3, false) do |users| %>
+            <tr class="collapse step-<%= index %>">
+              <% users.each do |user| %>
+                <td><%= user.name %></td><td><%= link_to 'View', organization_user_path(@current_profile, user.id) %></td>
+              <% end %>
+            </tr>
+          <% end %>
+          <% index += 1 %>
+        <% end %>
+
+        <% @user_ids -= incomplete_user_ids %>
+      <% end %>
+
+      <tr>
+        <th colspan='6'>
+          <h4><a data-toggle="collapse" data-parent="#accordion" data-target=".completed"><i class="fa fa-plus"></i>All Steps</a>
+            <span class='pull-right'>Completed: <%= @user_ids.count %></span>
+          </h4>
+        </th>
+      </tr>
+      <% @current_profile.users.where(id: @user_ids).order(:first_name).in_groups_of(3, false) do |users| %>
+        <tr class="collapse completed">
+          <% users.each do |user| %>
+            <td><%= user.name %></td><td><%= link_to 'View', organization_user_path(@current_profile, user.id) %></td>
+          <% end %>
+        </tr>
+      <% end %>
+
+    </tbody>
+  </table>
+</div>

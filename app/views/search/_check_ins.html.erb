@@ -1,0 +1,4 @@
+<div class='col-xs-12'><%= f.input :match_id, as: :select, collection: @match_names, label: false, include_blank: '- Matches -' %></div>
+<div class='col-xs-6 col-sm-3 col-md-2 col-lg-1'><%= f.input :length, as: :select, collection: Collections::CHECK_IN_LENGTH, label: false, include_blank: '- Time -' %></div>
+<div class='col-xs-6 col-sm-3 col-md-2 col-lg-2'><%= f.input :meeting_type, as: :select, collection: Collections::CHECK_IN_MEETING_TYPE, label: false, include_blank: '- Meeting Type -' %></div>
+<div class='col-xs-6 col-sm-3 col-md-2 col-lg-1'><%= f.input :rating, as: :select, collection: (1..5), label: false, include_blank: '- Rating -' %></div>

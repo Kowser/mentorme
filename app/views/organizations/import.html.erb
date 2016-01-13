@@ -1,0 +1,112 @@
+<div class="panel panel-info">
+  <div class="panel-heading">
+    <h4 class="panel-title">Import Users</h4>
+  </div>
+  <div class="panel-body">
+    <strong>REQUIRED:</strong>
+      <ul>
+        <li>First &amp; Last Name </li>
+        <li>Login (Email or Phone)</li>
+        <li>Gender</li>
+        <li>(all other fields optional)</li>
+      </ul>
+      <p>Please download the provided template to prevent errors during import: (<%= link_to 'User Import XLSX template', ActionController::Base.helpers.asset_path("files/user_import.xlsx") %>)<br>File import must be in <strong>CSV</strong> format.</p>
+  </div>
+  <table class="table table-condensed table-responsive">
+    <thead>
+      <tr>
+        <th colspan='7' class='text-center active'>EXAMPLE</th>
+      </tr>
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Login</th>
+        <th>Gender</th>
+        <th>Joined Date</th>
+        <th>...</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Steve</td>
+        <td>Bonner</td>
+        <td>SteveBonner@example.com</td>
+        <td>Male</td>
+        <td>6/17/2009</td>
+        <td>...</td>
+      </tr>
+      <tr>
+        <td>Carla</td>
+        <td>Douglass</td>
+        <td>CDouglass@example.com</td>
+        <td>Female</td>
+        <td>11/4/2014</td>
+        <td>...</td>
+      </tr>
+      <tr class="well">
+        <td colspan='7'>
+          <%= form_tag organization_import_csv_path(@current_profile), class: "form-inline", multipart: true do %>
+            <div class="row">
+              <div class="col-md-3">User Type: <%= select_tag :role, options_for_select([['- Choose -', nil],['Mentors', 'Mentor'],['Mentees', 'Mentee']]) %></div>
+              <div class="col-md-6">Login Password (optional, 8+ char): <%= text_field_tag :password %></div>
+              <div class="col-md-3"><%= check_box_tag :notification %> Send password reset instructions after import</div>
+            </div>
+            <div class="form-group">
+              <%= file_field_tag :file, class: 'form-control' %>
+            </div>
+            <%= submit_tag "Import Users", class: "btn btn-primary", data: { disable_with: "Uploading..." } %>
+          <% end %>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="panel panel-success">
+  <div class="panel-heading">
+    <h4 class="panel-title">Import Matches</h4>
+  </div>
+  <div class="panel-body">
+    <strong>REQUIRED:</strong>
+    <ul>
+      <li>1+ Mentor Login(s)</li>
+      <li>1+ Mentee Login(s)</li>
+      <li>1 Staff Member - Where notification emails are sent</li>
+    </ul>
+
+    <p>Please download the provided template to prevent errors during import: (<%= link_to 'Match Import CSV template', ActionController::Base.helpers.asset_path("files/match_import.csv") %>)</p>
+    <p><strong>IMPORTANT:</strong> Matches can be duplicated. If you import a match more than once, than it will duplicate. If you receive errors on any matches imported, please re-import <strong><u>ONLY</u></strong> those specific matches.</p>
+  </div>
+
+  <table class="table table-condensed table-responsive">
+    <thead>
+      <tr>
+        <th colspan='4' class='text-center active'>EXAMPLE</th>
+      </tr>
+      <tr>
+        <th>Staff Member</th>
+        <th>Mentor 1 Login</th>
+        <th>...</th>
+        <th>Mentee 1 Login</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>staff@example.com</td>
+        <td>mentor@example.com</td>
+        <td>...</td>
+        <td>5556986542</td>
+      </tr>
+      <tr class="well">
+        <td colspan='4'>
+          <%= form_tag organization_import_csv_path(@current_profile, role: "Match"), class: "form-inline", multipart: true do %>
+            <div class="form-group">
+              <%= file_field_tag :file, class: 'form-control' %>
+            </div>
+            <%= submit_tag "Import Matches", class: "btn btn-success", data: { disable_with: "Uploading..." } %>
+          <% end %>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

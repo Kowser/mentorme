@@ -1,0 +1,50 @@
+<% notes = object.notes.where(organization_id: [@current_profile.id, @current_profile.umbrella.try(:id)]) %>
+<div id='notes-object-<%= object.id %>'>
+  <% if notes.any? %>
+    <div class='<%= collapse ? 'collapse' : 'in' %>' id='collapse-<%= object.id %>'>
+      <table class="table table-ultra-condensed table-striped table-hover table-responsive">
+        <thead>
+          <tr>
+            <th><i class="fa fa-pencil"></i></th>
+            <th>Staff Note(s)</th>
+            <th>Staff Member</th>
+            <th>Last Edit</th>
+            <th><i class="fa fa-trash-o"></i></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% notes.each do |note| %>
+            <tr id="note-<%= note.id %>">
+              <td>
+                <% if note.staff == current_user %>
+                  <%= link_to edit_note_path(note), remote: true do %>
+                    <i class="fa fa-pencil"></i>
+                  <% end %>
+                <% end %>
+              </td>
+              <td><%= note.content %></td>
+              <td><%= note.staff.name %></td>
+              <td><%= note.updated_at.try(:strftime, "%m/%d/%Y") %></td>
+              <td>
+                <% if note.staff == current_user %>
+                  <%= link_to note, method: :delete, remote: true do %>
+                    <i class="fa fa-trash-o"></i>
+                  <% end %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+  
+  <div id='new-note-object-<%= object.id %>'>
+    <% if notes.any? %>
+      <%= link_to "#collapse-#{object.id}", :data => { toggle: "collapse", parent: "#accordion" } do %>
+        <span class='btn btn-default btn-xs'>Toggle Notes</span><% end %>
+    <% end %>
+    <%= link_to 'Add Note', new_note_path(id: object.id, type: object.class.to_s), data: { disable_with: "Loading..." },
+      remote: true, class: 'btn btn-default btn-xs' %>
+  </div>
+</div>

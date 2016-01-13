@@ -1,0 +1,23 @@
+<%= semantic_form_for :selected, url: organization_goals_path, method: :post, remote: true do |s| %>
+	<%= s.input :match_type, label: 'Choose Match(es)', as: :select, collection: ['All Matches', ['Selected Matches','selected_matches'], ['Specific Match / Individual(s)', 'specific_match']], include_blank: false %>
+  <div id='hidden' style="display: none">
+  	<%= s.input :match_id, label: 'Choose specific match', as: :select, include_blank: '-- Choose Match --',
+  		collection: @current_profile.matches %>
+  </div>
+<% end %>
+
+<%= semantic_form_for [@current_profile, Goal.new] do |f| %>
+	<div id='match_ids'><%= hidden_field_tag 'match_ids[]', 'all' %></div>
+	<div class='row'>
+		<div class='col-md-4'>
+			<%= f.input :title %>
+		</div>
+		<div class='col-md-6'>
+			<%= f.input :link, label: 'Hyperlink (optional)' %>
+		</div>
+		<div class='col-md-2'>
+			<%= f.input :deadline, as: :string %>
+		</div>
+	</div>
+  <%= f.submit "Submit", class: "btn btn-danger" %>
+<% end %>

@@ -1,0 +1,147 @@
+.landing-layout {
+  height: 100%;
+  padding: 0px;
+  margin: 0px;
+
+  .alert {
+    margin-bottom: 0;
+  }
+
+  @media(min-width: 321px) {
+    .first_name_box {
+      padding-right: 1px;
+    }
+
+    .last_name_box {
+      padding-left: 1px;
+    }
+  }
+
+  /* HEADER */
+  .header {
+    background-color: #EEE;
+    height: 120px;
+
+    img#logo {
+      max-height: 100px;
+      margin: 10px 0 0 10px;
+    }
+
+    .header-links {
+      float: right;
+      padding: 20px 15px 0 0;
+      .btn-standard {
+        color: #EEE;
+      }
+    }
+
+    .header-links.open {
+      a, a:hover, a:focus {
+        color: #333;
+      }
+    }
+  }
+
+  /* HERO STRIPE */
+  .hero-container {
+    width: 100%;
+    max-height: 50%;
+    min-height: 550px;
+    position: relative;
+    overflow-y: hidden;
+    overflow: hidden;
+    background: #000;
+    img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      @media (max-width: 991px) {
+        width: auto;
+        min-height: 50%;
+      }
+    }
+    @media (max-width: 479px) {
+      min-height: 500px;
+    }
+  }
+
+  /* FLOATING FORM CONTENTS */
+  .float-form-container {
+    max-width: 367px;
+    left: 6%;
+    position: relative;    /*background-color: #000;*/
+
+    .float-form-bubble {
+      width: 120px;
+      height: 120px;
+      border: solid #fff 10px;
+      background-color: #58c1d0;
+      -webkit-border-radius: 100px;
+      -moz-border-radius: 100px;
+      border-radius: 100px;
+      top: -60px;
+      position: absolute;
+
+      text-align: center;
+      font-family: 'Open-Sans', sans-serif;
+      font-size: 14px;
+      padding: 12px 10px 0;
+      color: #fff;
+    }
+
+    .float-form-content {
+      width: 300px;
+      padding: 40px 20px 20px 40px;
+      margin: 90px 0 0 67px;
+      -webkit-border-radius: 15px;
+      -moz-border-radius: 15px;
+      border-radius: 15px;
+      background-color: rgba(255, 255, 255, 0.75);
+    }
+
+    @media (max-width: 479px) {
+      .float-form-bubble {
+        display: none;
+      }
+
+      .float-form-content {
+        margin: 10% 0 0 0;
+        padding: 20px 20px 20px 20px;
+      }
+    }
+  }
+
+  /* STEPS STRIP */
+  .steps-stripe {
+    margin-left: 10%;
+    width: 80%;
+    padding-bottom: 15px;
+  }
+
+  .count {
+    -webkit-border-radius: 100px;
+    -moz-border-radius: 100px;
+    border-radius: 100px;
+    background-color: #55c2d1;
+    color: #fff;
+    font-size: 24px;
+    width: 42px;
+    height: 42px;
+    text-align: center;
+    float: left;
+    padding-top: 4px;
+    margin-right: 10px;
+  }
+
+  /* BLACK STRIPE */
+  .black-stripe {
+    background-color: #000;
+    padding: 1% 10% 5% 10%;
+    color: #FFF;
+    text-align: center;
+    h2 {
+      padding-bottom: 15px;
+    }
+  }
+}

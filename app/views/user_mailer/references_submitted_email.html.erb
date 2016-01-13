@@ -1,0 +1,6 @@
+<% provide(:header, "Mentor references submitted") %>
+<% content_for :body do %>
+	<p>Hey <%= @user.first_name %>!<p>
+	<p>We just wanted to let you know that all of your references have completed their endorsements. Be sure to thank them!</p>
+<% end %>
+<%= render 'shared_mailer/mailer_template' %>

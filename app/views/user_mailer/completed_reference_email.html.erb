@@ -1,0 +1,6 @@
+<% provide(:header, 'A reference has been completed') %>
+<% content_for :body do %>
+	<p>Hey <%= @user.first_name %>!<p>
+  <p>One of your references has completed their endorsement!</p>
+<% end %>
+<%= render 'shared_mailer/mailer_template' %>

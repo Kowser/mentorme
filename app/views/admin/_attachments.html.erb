@@ -1,0 +1,48 @@
+<table class="table table-condensed table-striped table-hover table-responsive">
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th>File Name</th>
+      <th>Uploaded By</th>
+      <th>Uploaded On</th>
+      <th><i class="fa fa-trash-o"></i></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% object.attachments.each do |attachment| %>
+      <tr>
+        <td><%= attachment.description %></td>
+        <td><%= link_to attachment.document_file_name, attachment.document.url %></td>
+        <td><%= attachment.user.try(:name) %></td>
+        <td><%= attachment.created_at.strftime("%m/%d/%Y") %></td>
+        <td>
+          <%= link_to attachment, method: :delete, class: 'delete-file-link', data: { disable_with: "Deleting..." }, remote: true do %>
+            <i class="fa fa-trash-o"></i>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+  <tfoot>
+    <tr class="well">
+      <td colspan='8'>
+        <%= semantic_form_for object do |f| %>
+          <%= f.semantic_fields_for :attachments, object.attachments.build do |a| %>
+            <%= a.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
+            <div class='row'>
+              <div class='col-md-6'>
+                <%= a.input :description, label: false, hint: "Enter Description (optional)" %>
+              </div>
+              <div class='col-md-4'>
+                <%= a.input :document, label: false, as: :file, required: false %>
+              </div>
+              <div class='col-md-2'>
+                <%= f.submit "Upload", class: "btn btn-sm btn-danger", data: { disable_with: "Uploading..." } %>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </td>
+    </tr>
+  </tfoot>
+</table>

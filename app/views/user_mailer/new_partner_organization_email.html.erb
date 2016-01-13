@@ -1,0 +1,9 @@
+<% provide(:header, "Hooray! You've been assigned to #{@organization.name}") %>
+<% content_for :body do %>
+  <p>Learn about your new organization here: <%= link_to @organization.name, root_url(:subdomain => @organization.subdomain) %></p>
+  <% if @user.is_mentor? %>
+    <p>Please <%= link_to "Login", root_url %> to your profile to continue the application process. You'll also need to submit 3 references.</p>
+  <% end %>
+<% end %>
+<%= render 'shared_mailer/mailer_template' %>
+

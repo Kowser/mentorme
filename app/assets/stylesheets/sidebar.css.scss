@@ -1,0 +1,166 @@
+.sidebar {
+	position: absolute;
+	position: fixed;
+	top: 0px;
+	z-index: 5;
+	background-color: #333;
+	li { list-style: none; }
+
+	@media(min-width: 768px) {
+		height: 100%;
+	  width: 170px;
+	}
+
+	@media(max-width: 767px) {
+		padding-bottom: 5px;
+		min-height: 90px;
+		width: 100%;
+	}
+
+	.logo-box {
+	  background-color: #fff;
+	  overflow: hidden;
+	  position: absolute;
+	  text-align: center;
+
+	  @media(min-width: 768px) {
+	    top: 25px;
+	    left: 25px;
+	    width: 120px;
+	    height: 120px;
+	    border: #292929 solid 6px;
+	    padding: 2px;
+	  }
+
+	  @media(max-width: 767px) {
+	    top: 5px;
+	    left: 5px;
+	    width: 80px;
+	    height: 80px;
+	    border: #292929 solid 4px;
+	    padding: 1px;
+	    img {
+	    	max-height: 70px;
+	    }
+	  }
+	}
+
+	/* BOOTSTRAP OVERRIDES */
+	.navbar-collapse {
+		padding: 0px;
+	}
+
+	.fa-chevron-right {
+		margin-top: 10px;
+		margin-right: 5px;
+		@media(max-width: 767px) {
+			display: none;
+		}
+	}
+
+	.fa-chevron-down {
+		margin-top: 6px;
+		margin-right: 10px;
+		font-size: 16px;
+		@media(min-width: 768px) {
+			display: none;
+		}
+	}
+
+	.dropdown-menu {
+		text-indent: 0px;
+		font-size: 12px;
+		background-color: #333;
+
+		@media(min-width: 768px) {
+			left: 170px;
+			top: -5px;
+		}
+
+		@media(max-width: 767px) {
+			left: 0;
+			top: 29px;
+			width: 100%;
+		}
+
+		.divider {
+			margin: 5px 0;
+		}
+	}
+	/* end BOOTSTRAP OVERRIDES */
+
+	.menu {
+	  line-height: 30px;
+	  a {
+	    color: #999;
+	    display: block;
+	    text-decoration: none;
+	    &:hover {
+	      color: #fff;
+	      background: #191919;
+	      border-left: #2EB8E6 solid 3px;
+	    }
+	  }
+
+	  @media(min-width: 768px) {
+	  	margin-top: 100px;
+	  	.hidden-sm { display: none !important; }
+	  }
+
+	  @media(max-width: 767px) {
+	  	margin-top: 15px;
+	  }
+
+	  .menu-list {
+	  	vertical-align: top;
+	  	font-size: 10px;
+	  	text-indent: 7px;
+	  	
+	  	@media(max-width: 767px) {
+	  		text-indent: 5px;
+	  		min-width: 49.5%;
+	  		display: inline-block;
+	  	}
+	  }
+
+	  .user-dropdown {
+	  	font-size: 12px;
+	  	border-top: #292929 solid 1px;
+	  	border-bottom: #292929 solid 1px;
+
+	  	@media(max-width: 767px) {
+	  		text-indent: 5px;
+	  	}
+
+	  	@media(min-width: 768px) {
+	  		text-indent: 7px;
+	  		width: 100%;
+	  	}
+	  }
+	}
+
+	.footer-links {
+		font-size: 10px;
+		color: #999;
+		text-indent: 5px;
+		border-top: #292929 solid 1px;
+		width: 100%;
+		a {
+			color: #fff;
+		}
+
+		@media(min-width:767px) {
+			position: absolute;
+			bottom: 5px;
+			line-height: 20px;
+		}
+
+		@media(max-width: 767px) {
+			line-height: 30px;
+			li {
+				display: inline-block;
+				margin-right: 10px;
+			}
+		}
+	}
+}

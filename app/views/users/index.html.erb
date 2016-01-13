@@ -1,0 +1,54 @@
+<% content_for :search do %>
+  <%= render_search_panel('users', path: organization_users_path(@current_profile, search: {role: role_name.try(:singularize)})) %>
+<% end %>
+
+<%= form_tag organization_update_users_path(@current_profile) do %>
+  <% if role_name %>
+    <%= render_admin_panel("Update #{role_name}", 'update_users') %>
+  <% else %>
+    <div class="panel panel-danger">
+      <div class="panel-heading">
+        <h4 class="panel-title">Choose a 'Type' to show update options</h4>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="panel panel-success">
+    <div class="panel-heading">
+      <h4 class="panel-title">Total (<%= @users.total_entries %>)
+        <span class='pull-right'>
+          <%= link_to "Export CSV", organization_users_path(@current_profile, @users, params.merge(format: "csv")), id: "export_link", method: :get, class: 'btn btn-xs btn-success' unless @users.empty? %>
+        </span>
+      </h4>
+    </div>
+      <table class="table table-condensed table-striped table-hover table-responsive" id="mentors-table">
+        <thead>
+          <tr>
+            <th><i class="fa fa-check"></i></th>
+            <th>Name</th>
+            <th class="hidden-sm">Login</th>
+            <th class="hidden-sm text-center"># Logins</th>
+            <th class="hidden-sm">Signed Up</th>
+            <th>Progress</th>
+            <th class='text-center'>Matched</th>
+            <th><i class="fa fa-pencil"></i></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @users.each do |user| %>
+            <tr>
+              <td><%= check_box_tag "user_ids[]", user.id %></td>
+              <td><%= link_to "#{user.last_name}, #{user.first_name}", organization_user_path(@current_profile, user) %></td>
+              <td class="hidden-sm"><%= user.login %></td>
+              <td class="hidden-sm text-center"><%= user.sign_in_count %></td>
+              <td class="hidden-sm"><%= user.enrolled(@current_profile) %></td>
+              <td><%= render 'progress_bar', percent_complete: user.organizations_users.find_by(organization: @current_profile).progress %></td>
+              <td class='text-center'><%= user.matches.blank? ? "No" : "Yes" %></td>
+              <td><%= user.organizations_users.find_by(organization: @current_profile).notes.count %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <%= will_paginate @users, renderer: BootstrapPagination::Rails %>
+  </div>
+<% end %>

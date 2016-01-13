@@ -1,0 +1,6 @@
+<% content_for :search do %>
+	<%= render_search_panel('goals', path: polymorphic_path([@current_profile, Goal])) %>
+<% end %>
+
+<%= render_admin_panel('Assign a Goal', 'add_goal_form') if current_user.is_partner? %>
+<%= render 'index_panel' %>

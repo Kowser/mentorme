@@ -1,0 +1,6 @@
+<% provide(:header, "New Goal Completed") %>
+<% content_for :body do %>
+  <p>Woohoo! Match with mentor(s):<% @goal.match.mentors.each do |mentor| %> <%= mentor.name %> <% end %>just completed a new goal! Log in <%= link_to 'here', new_user_session_url %> to confirm.</p>
+  <p>P.S. Don't forget to follow up and say congrats!</p>
+<% end %>
+<%= render 'shared_mailer/mailer_template' %>

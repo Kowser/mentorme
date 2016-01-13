@@ -1,0 +1,59 @@
+<div class="panel panel-success" id="goals-index-panel">
+  <div class="panel-heading">
+    <h4 class="panel-title">Goals (<%= @goals.total_entries %>)</h4>
+  </div>
+  <%= will_paginate @goals, renderer: BootstrapPagination::Rails %>
+  <table class="table table-striped table-condensed table-hover table-responsive">
+    <tr>
+      <th>Title</th>
+      <th>Link</th>
+      <th>Status</th>
+      <th>Completed By</th>
+      <% if current_user.is_partner? %>
+        <th>Verified By</th>
+      <% end %>
+      <th>Assigned Date</th>
+      <th>Deadline</th>
+      <% if current_user.is_partner? %>
+        <th><i class="fa fa-trash-o"></i></th>
+      <% end %>
+    </tr>
+    <tbody>
+      <% @goals.each do |goal| %>
+        <tr id='goal-<%= goal.id %>'>
+          <td><%= goal.title %></td>
+          <td><%= goal.link.blank? ? "--" : (link_to "View", external_link(goal.link), target: '_blank') %></td>
+          <td>
+            <% if current_user.is_mentor? && !goal.completed %>
+              <%= form_for goal, html: { method: "patch" }, remote: true do |f| %>
+                <%= f.check_box :completed, id: 'completed' %> <span class="status">Complete</span>
+              <% end %>
+            <% elsif current_user.is_partner? && goal.completed && !goal.verified %>
+              <%= form_for goal, html: { method: "patch" }, remote: true do |f| %>
+                <%= f.check_box :verified, id: 'verify' %> <span class="status">Verify Completed</span>
+              <% end %>
+            <% elsif !goal.verified %>
+              <span class="status"><%= goal.completed ? "Pending Verification" : "Incomplete" %></span>
+            <% else %>
+              <span class="status">Verified</span>
+            <% end %>
+          </td>
+          <td><%= goal.completed_by.try(:name) %></td>
+          <% if current_user.is_partner? %>
+            <td><%= goal.verified_by.try(:name) %></td>
+          <% end %>
+          <td><%= goal.created_at.strftime("%m/%d/%Y") %></td>
+          <td><%= goal.deadline.try(:strftime, "%m/%d/%Y") %></td>
+          <% if current_user.is_partner? %>
+            <td>
+              <%= link_to goal_path(goal), method: :delete, class: "delete-goal-link", remote: true do %>
+                <i class="fa fa-trash-o"></i>
+              <% end %>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= will_paginate @goals, renderer: BootstrapPagination::Rails %>
+</div>
