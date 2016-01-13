@@ -1,4 +1,4 @@
-MentorMe, Inc.
+# [MentorMe, Inc.](http://www.getmentorme.co)
 ====================
 
 ![alt text](https://github.com/Kowser/Ruby_on_Rails_Portfolio/blob/master/images/screenshots-mm.png "MentorMe, Inc. screenshots")
