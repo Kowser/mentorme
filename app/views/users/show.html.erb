@@ -51,7 +51,7 @@
               <tr><td>Mentoring Hours:</td><td><%= @user.check_ins.pluck(:length).inject(:+) %></td></tr>
               <tr>
                 <% if @user.is_mentor? %>
-                  <td>Mentees:</td><td><%= @user.mentees.map(&:name).uniq.join(', ') %></td>
+                  <td>Mentees:</td><td><%#= @user.mentees.map(&:name).uniq.join(', ') %></td>
                 <% else %>
                   <td>Mentors:</td><td><%= @user.mentors.map(&:name).uniq.join(', ') %></td>
                 <% end %>

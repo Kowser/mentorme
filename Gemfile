@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
-ruby '2.1.3'
-gem 'rails', '4.0.4'
+# ruby '2.3.0'
+gem 'rails', '4.2.4'
 gem 'sass-rails', '~> 4.0.2'
 gem 'compass-rails', '~> 1.1.2'
 gem 'uglifier', '>= 1.3.0'
@@ -22,17 +22,14 @@ gem 'rest-client'
 gem 'awesome_print'
 gem 'will_paginate', '~> 3.0'
 gem 'will_paginate-bootstrap'
-gem 'whenever', :require => false
 gem 'premailer-rails'
 gem 'nokogiri'
-gem 'intercom-rails', '~> 0.2.24'
 gem 'event_tracker'
 gem 'breadcrumbs_on_rails'
 
 group :development do
   gem 'quiet_assets'
   gem 'faker'
-  gem 'xray-rails'
 end
 
 # group :test do
